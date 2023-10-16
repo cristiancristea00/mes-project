@@ -37,7 +37,7 @@
  * @brief Macro to convert UART baud rate to the value to be used in the BAUD
  *        register of the USART.
  **/
-#define UART_BAUD_RATE(x) ((uint16_t) ((4UL * F_CPU) / (x)))
+#define UART_BAUD_RATE(X) ((uint16_t) ((4UL * F_CPU) / (X)))
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -53,33 +53,37 @@
  *******************************************************************************/
 
 /**
- * @brief Initialize the UART0 module by setting the baud rate and enabling the
+ * @brief Initializes the UART0 module by setting the baud rate and enabling the
  *        transmitter and receiver. The UART0 module is configured for 8-bit
  *        with no parity and 1 stop bit. The Receive Complete Interrupt and
  *        Global interrupts are enabled.
  * @param[in] baudRate The baud rate
  * @param[in] receiveCallback The callback function to be called when a byte is
  *                            received
+ * @return None
  **/
 __attribute__((always_inline)) inline static void UART0_InitializeWithReceive(uint32_t const baudRate, uart_callback_t const receiveCallback);
 
 /**
- * @brief Initialize the UART0 module by setting the baud rate and enabling the
+ * @brief Initializes the UART0 module by setting the baud rate and enabling the
  *        transmitter. The UART0 module is configured for 8-bit with no parity
  *        and 1 stop bit.
  * @param[in] baudRate The baud rate
+ * @return None
  **/
 __attribute__((always_inline)) inline static void UART0_Initialize(uint32_t const baudRate);
 
 /**
  * @brief Sends a null-terminated string over UART0.
  * @param[in] string The null-terminated string to be sent
+ * @return None
  **/
 static void UART0_Print(char const * const string);
 
 /**
  * @brief Send a single character over UART0.
  * @param[in] character The character to be sent
+ * @return None
  */
 __attribute__((always_inline)) inline static void UART0_PrintChar(char const character);
 
@@ -87,19 +91,22 @@ __attribute__((always_inline)) inline static void UART0_PrintChar(char const cha
  * @brief Sends a number of bytes over UART0.
  * @param[in] buffer The buffer containing the bytes to be sent
  * @param[in] bufferSize The number of bytes to be sent
+ * @return None
  **/
 static void UART0_SendData(uint8_t const * const buffer, uint8_t const bufferSize);
 
 /**
  * @brief Sends a byte over UART0.
  * @param[in] dataByte The byte to be sent
+ * @return None
  **/
 static void UART0_SendByte(uint8_t const dataByte);
 
 /**
  * @brief Checks if the UART0 module is busy sending data.
- * @return true The UART1 module is busy.
- * @return false The UART1 module is ready.
+ * @return bool Whatever the TX line is busy
+ * @retval true The UART1 module is busy.
+ * @retval false The UART1 module is ready.
  **/
 __attribute__((always_inline)) inline static bool UART0_TXBusy(void);
 
@@ -107,6 +114,7 @@ __attribute__((always_inline)) inline static bool UART0_TXBusy(void);
  * @brief Registers a callback function to be called when a byte is received
  *        over UART0.
  * @param[in] callback The callback function to be registered
+ * @return None
  **/
 __attribute__((always_inline)) inline static void UART0_RegisterCallback(uart_callback_t const callback);
 
@@ -117,54 +125,60 @@ __attribute__((always_inline)) inline static void UART0_RegisterCallback(uart_ca
  *******************************************************************************/
 
 /**
- * @brief Initialize the UART1 module by setting the baud rate and enabling the
+ * @brief Initializes the UART1 module by setting the baud rate and enabling the
  *        transmitter and receiver. The UART1 module is configured for 8-bit
  *        with no parity and 1 stop bit. The Receive Complete Interrupt is
  *        enabled.
  * @param[in] baudRate The baud rate
  * @param[in] receiveCallback The callback function to be called when a byte is
  *                        received
+ * @return None
  **/
 __attribute__((always_inline)) inline static void UART1_InitializeWithReceive(uint32_t const baudRate, uart_callback_t const receiveCallback);
 
 /**
- * @brief Initialize the UART1 module by setting the baud rate and enabling the
+ * @brief Initializes the UART1 module by setting the baud rate and enabling the
  *        transmitter. The UART1 module is configured for 8-bit with no parity
  *        and 1 stop bit.
  * @param[in] baudRate The baud rate
+ * @return None
  **/
 __attribute__((always_inline)) inline static void UART1_Initialize(uint32_t const baudRate);
 
 /**
  * @brief Sends a null-terminated string over UART1.
  * @param[in] string The null-terminated string to be sent
+ * @return None
  **/
 static void UART1_Print(char const * const string);
 
 /**
  * @brief Send a single character over UART1.
  * @param[in] character The character to be sent
+ * @return None
  */
 __attribute__((always_inline)) inline static void UART1_PrintChar(char const character);
 
 /**
  * @brief Sends a number of bytes over UART1.
- *
  * @param[in] buffer The buffer containing the bytes to be sent
  * @param[in] bufferSize The number of bytes to be sent
+ * @return None
  **/
 static void UART1_SendData(uint8_t const * const buffer, uint8_t const bufferSize);
 
 /**
  * @brief Sends a byte over UART1.
  * @param[in] dataByte The byte to be sent
+ * @return None
  **/
 static void UART1_SendByte(uint8_t const dataByte);
 
 /**
  * @brief Checks if the UART1 module is busy sending data.
- * @return true The UART1 module is busy.
- * @return false The UART1 module is ready.
+ * @return bool Whatever the TX line is busy
+ * @retval true The UART1 module is busy.
+ * @retval false The UART1 module is ready.
  **/
 __attribute__((always_inline)) inline static bool UART1_TXBusy(void);
 
@@ -172,6 +186,7 @@ __attribute__((always_inline)) inline static bool UART1_TXBusy(void);
  * @brief Registers a callback function to be called when a byte is received
  *        over UART1.
  * @param[in] callback The callback function to be registered
+ * @return None
  **/
 __attribute__((always_inline)) inline static void UART1_RegisterCallback(uart_callback_t const callback);
 
@@ -180,7 +195,6 @@ __attribute__((always_inline)) inline static void UART1_RegisterCallback(uart_ca
 /**
  * @brief Wrapper around the @ref UART1_PrintChar function to make it compatible
  *        with the C stream interface.
- *
  * @param[in] character The character to be sent
  * @param[in] stream The stream used to send the character
  * @return int8_t Always returns 0
@@ -425,7 +439,7 @@ __attribute__((always_inline)) inline static void UART1_RegisterCallback(uart_ca
 
 ISR(USART0_RXC_vect)
 {
-    uint8_t byte = USART0.RXDATAL;
+    uint8_t const byte = USART0.RXDATAL;
 
     if (uart0Callback != NULL)
     {
@@ -441,7 +455,7 @@ ISR(USART0_RXC_vect)
 
 ISR(USART1_RXC_vect)
 {
-    uint8_t byte = USART1.RXDATAL;
+    uint8_t const byte = USART1.RXDATAL;
 
     if (uart1Callback != NULL)
     {

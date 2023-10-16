@@ -26,14 +26,14 @@
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
 
-typedef void (* uart_callback_t) (uint8_t const);
-typedef void (* uart_initialize_t) (uint32_t const);
-typedef void (* uart_initialize_receive_t) (uint32_t const, uart_callback_t const);
-typedef void (* uart_send_byte_t) (uint8_t const);
-typedef void (* uart_send_data_t) (uint8_t const * const, uint8_t const);
-typedef void (* uart_print_char_t) (char const);
-typedef void (* uart_print_t) (char const * const);
-typedef void (* uart_register_callback_t) (uart_callback_t const);
+typedef void (* uart_callback_t) (uint8_t const value);
+typedef void (* uart_initialize_t) (uint32_t const baudRate);
+typedef void (* uart_initialize_receive_t) (uint32_t const baudRate, uart_callback_t const receiveCallback);
+typedef void (* uart_send_byte_t) (uint8_t const dataByte);
+typedef void (* uart_send_data_t) (uint8_t const * const buffer, uint8_t const bufferSize);
+typedef void (* uart_print_char_t) (char const character);
+typedef void (* uart_print_t) (char const * const string);
+typedef void (* uart_register_callback_t) (uart_callback_t const callback);
 
 
 typedef struct UART
