@@ -190,7 +190,7 @@ __attribute__((always_inline)) inline static bool UART1_TXBusy(void);
  **/
 __attribute__((always_inline)) inline static void UART1_RegisterCallback(uart_callback_t const callback);
 
-#if UART_PRINTF == true
+#if defined UART_PRINTF
 
 /**
  * @brief Wrapper around the @ref UART1_PrintChar function to make it compatible
@@ -331,7 +331,7 @@ __attribute__((always_inline)) inline static void UART1_InitializeWithReceive(ui
     return;
 }
 
-#if UART_PRINTF == true
+#if defined UART_PRINTF
 
 __attribute__((always_inline)) inline static int8_t UART1_SendChar(char const character, __attribute__((unused)) FILE * const stream)
 {
@@ -346,7 +346,7 @@ static FILE uart_1_stream = FDEV_SETUP_STREAM(UART1_SendChar, NULL, _FDEV_SETUP_
 
 __attribute__((always_inline)) inline static void UART1_Initialize(uint32_t const baudRate)
 {
-#if UART_PRINTF == true
+#if defined UART_PRINTF
 
     stdout = &uart_1_stream;
 

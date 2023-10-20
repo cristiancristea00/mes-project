@@ -137,7 +137,7 @@ typedef struct BME280_UNCOMPENSATED_DATA
  * @retval BME280_OK If the device is valid
  * @retval BME280_NULL_POINTER If a NULL pointer was found
  **/
-static bme280_error_code_t BME280_CheckNull(bme280_device_t const * const device);
+__attribute__((always_inline)) inline static bme280_error_code_t BME280_CheckNull(bme280_device_t const * const device);
 
 /**
  * @brief Reads a number of one byte registers from the device using I2C and
@@ -361,7 +361,7 @@ static bme280_error_code_t BME280_WritePowerMode(bme280_device_t * const device,
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
 
-static bme280_error_code_t BME280_CheckNull(bme280_device_t const * const device)
+__attribute__((always_inline)) inline static bme280_error_code_t BME280_CheckNull(bme280_device_t const * const device)
 {
     if (device == NULL || device->handler == NULL || device->i2cDevice == NULL)
     {
@@ -406,7 +406,7 @@ static bme280_error_code_t BME280_I2C_WriteRegisters(i2c_t const * const i2c, ui
         interleavedDataBuffer[2 * registerIdx + 1] = dataBuffer[registerIdx];
     }
 
-    if (i2c->SendData(address, &interleavedDataBuffer, interleavdBufferLength) != I2C_OK)
+    if (i2c->SendData(address, interleavedDataBuffer, interleavdBufferLength) != I2C_OK)
     {
         writeResult = BME280_COMMUNICATION_ERROR;
     }
@@ -418,9 +418,9 @@ static bme280_error_code_t BME280_I2C_WriteRegisters(i2c_t const * const i2c, ui
 
 static bme280_error_code_t BME280_GetRegisters(bme280_device_t const * const device, uint8_t const registerAddress, uint8_t * const dataBuffer, uint8_t const bufferLength)
 {
-    bme280_error_code_t getResult = BME280_CheckNull(device);
+    bme280_error_code_t getResult = BME280_OK;
 
-    if (getResult == BME280_OK && dataBuffer != NULL)
+    if (dataBuffer != NULL)
     {
         if (device->handler->I2C_Read(device->i2cDevice, device->i2cAddress, registerAddress, dataBuffer, bufferLength) != BME280_OK)
         {
@@ -437,9 +437,9 @@ static bme280_error_code_t BME280_GetRegisters(bme280_device_t const * const dev
 
 static bme280_error_code_t BME280_SetRegisters(bme280_device_t const * const device, uint8_t const * const registerAddresses, uint8_t const * const dataBuffer, uint8_t const bufferLength)
 {
-    bme280_error_code_t setResult = BME280_CheckNull(device);
+    bme280_error_code_t setResult = BME280_OK;
 
-    if (setResult == BME280_OK && dataBuffer != NULL && registerAddresses != NULL)
+    if (dataBuffer != NULL && registerAddresses != NULL)
     {
         if (bufferLength != 0)
         {
@@ -455,7 +455,6 @@ static bme280_error_code_t BME280_SetRegisters(bme280_device_t const * const dev
     }
     else
     {
-
         setResult = BME280_NULL_POINTER;
     }
 
@@ -464,45 +463,42 @@ static bme280_error_code_t BME280_SetRegisters(bme280_device_t const * const dev
 
 static bme280_error_code_t BME280_SoftReset(bme280_device_t const * const device)
 {
-    bme280_error_code_t resetResult = BME280_CheckNull(device);
+    bme280_error_code_t resetResult = BME280_OK;
 
     LOG_INFO("Started BME280 soft reset");
 
+    uint8_t const registerAdress = BME280_RESET_ADDRESS;
+    uint8_t const resetCommand   = BME280_SOFT_RESET_COMMAND;
+
+    resetResult = BME280_SetRegisters(device, &registerAdress, &resetCommand, 1);
+
     if (resetResult == BME280_OK)
     {
-        uint8_t const registerAdress = BME280_RESET_ADDRESS;
-        uint8_t const resetCommand   = BME280_SOFT_RESET_COMMAND;
+        uint8_t tryCount = 10;
+        uint8_t statusRegister = 0;
 
-        resetResult = BME280_SetRegisters(device, &registerAdress, &resetCommand, 1);
+        LOG_INFO("Finished BME280 soft reset successfully");
 
-        if (resetResult == BME280_OK)
+        do
         {
-            uint8_t tryCount = 10;
-            uint8_t statusRegister = 0;
-
-            LOG_INFO("Finished BME280 soft reset successfully");
-
-            do
-            {
-                LOG_INFO("Waiting for the BME280 NVM copying...");
-                PauseMiliseconds(2);
-                resetResult = BME280_GetRegisters(device, BME280_STATUS_REGISTER_ADDRESS, &statusRegister, 1);
-                --tryCount;
-            }
-            while ((resetResult == BME280_OK) && (tryCount != 0) && (statusRegister & BME280_STATUS_UPDATE));
-
-            if (statusRegister & BME280_STATUS_UPDATE)
-            {
-                resetResult = BME280_NVM_COPY_FAILED;
-
-                LOG_ERROR("The BME280 NVM copy failed");
-            }
+            LOG_INFO("Waiting for the BME280 NVM copying...");
+            PauseMiliseconds(2);
+            resetResult = BME280_GetRegisters(device, BME280_STATUS_REGISTER_ADDRESS, &statusRegister, 1);
+            --tryCount;
         }
-        else
+        while ((resetResult == BME280_OK) && (tryCount != 0) && (statusRegister & BME280_STATUS_UPDATE));
+
+        if (statusRegister & BME280_STATUS_UPDATE)
         {
-            LOG_ERROR("Failed to soft reset the BME280");
-            resetResult = BME280_COMMUNICATION_ERROR;
+            resetResult = BME280_NVM_COPY_FAILED;
+
+            LOG_ERROR("The BME280 NVM copy failed");
         }
+    }
+    else
+    {
+        LOG_ERROR("Failed to soft reset the BME280");
+        resetResult = BME280_COMMUNICATION_ERROR;
     }
 
     return resetResult;
@@ -589,7 +585,7 @@ static void BME280_ParseHumidityCalibration(bme280_calibration_data_t * const ca
 
 static bme280_error_code_t BME280_CompensateData(bme280_device_t * const device, bme280_uncompensated_data_t const * const uncompensatedData)
 {
-    bme280_error_code_t compensationResult = BME280_CheckNull(device);
+    bme280_error_code_t compensationResult = BME280_OK;
 
     if (uncompensatedData != NULL)
     {
@@ -720,24 +716,24 @@ static void BME280_ParseSensorData(bme280_uncompensated_data_t * const uncompens
 {
     // Store the parsed register values for temperature data
 
-    uint32_t temperatureMSB  = (uint32_t) ( data[3] << 12 );
-    uint32_t temperatureLSB  = (uint32_t) ( data[4] << 4 );
-    uint32_t temperatureXLSB = (uint32_t) ( data[5] >> 4 );
+    uint32_t temperatureMSB  = ( (uint32_t) data[3] ) << 12;
+    uint32_t temperatureLSB  = ( (uint32_t) data[4] ) << 4;
+    uint32_t temperatureXLSB = ( (uint32_t) data[5] ) >> 4;
 
     uncompensatedData->temperature = temperatureMSB | temperatureLSB | temperatureXLSB;
 
     // Store the parsed register values for pressure data
 
-    uint32_t pressureMSB  = (uint32_t) ( data[0] << 12 );
-    uint32_t pressureLSB  = (uint32_t) ( data[1] << 4 );
-    uint32_t pressureXLSB = (uint32_t) ( data[2] >> 4 );
+    uint32_t pressureMSB  = ( (uint32_t) data[0] ) << 12;
+    uint32_t pressureLSB  = ( (uint32_t) data[1] ) << 4;
+    uint32_t pressureXLSB = ( (uint32_t) data[2] ) >> 4;
 
     uncompensatedData->pressure = pressureMSB | pressureLSB | pressureXLSB;
 
     // Store the parsed register values for humidity data
 
-    uint32_t humidityMSB = (uint32_t) ( data[6] << 8 );
-    uint32_t humidityLSB = (uint32_t) ( data[7] );
+    uint32_t humidityMSB = ( (uint32_t) data[6] ) << 8;
+    uint32_t humidityLSB = ( (uint32_t) data[7] );
 
     uncompensatedData->humidity = humidityMSB | humidityLSB;
 
@@ -746,20 +742,14 @@ static void BME280_ParseSensorData(bme280_uncompensated_data_t * const uncompens
 
 static bme280_error_code_t BME280_SetSensorSettings(bme280_device_t * const device, bme280_settings_t const * const settings)
 {
-    bme280_error_code_t settingsResult = BME280_CheckNull(device);
+    bme280_error_code_t settingsResult = BME280_OK;
+
+    settingsResult = BME280_SetOversamplingSettings(device, settings);
 
     if (settingsResult == BME280_OK)
     {
-        if (settingsResult == BME280_OK)
-        {
-            settingsResult = BME280_SetOversamplingSettings(device, settings);
-        }
-
-        if (settingsResult == BME280_OK)
-        {
-            settingsResult = BME280_SetFilterStandbySettings(device, settings);
-        }
-
+        settingsResult = BME280_SetFilterStandbySettings(device, settings);
+        
         if (settingsResult == BME280_OK)
         {
             settingsResult = BME280_SetSensorPowerMode(device, settings);
@@ -874,12 +864,9 @@ static bme280_error_code_t BME280_SetFilterStandbySettings(bme280_device_t * con
 
 static bme280_error_code_t BME280_SetSensorPowerMode(bme280_device_t * const device, bme280_settings_t const * const settings)
 {
-    bme280_error_code_t modeResult = BME280_CheckNull(device);
+    bme280_error_code_t modeResult = BME280_OK;
 
-    if (modeResult == BME280_OK)
-    {
-        modeResult = BME280_WritePowerMode(device, settings->powerMode);
-    }
+    modeResult = BME280_WritePowerMode(device, settings->powerMode);
 
     if (modeResult == BME280_OK)
     {
@@ -956,7 +943,7 @@ bme280_error_code_t BME280_Inititialize(bme280_device_t * const device, bme280_h
             LOG_WARNING("Failed to find BME280. Trying again...");
 
             --tryCount;
-            PauseMiliseconds(1);
+            PauseMiliseconds(500);
         }
 
         if (tryCount == 0)
@@ -979,30 +966,25 @@ bme280_error_code_t BME280_Inititialize(bme280_device_t * const device, bme280_h
         LOG_ERROR("Couldn't finish the BME280 initialization");
     }
 
-    PauseMiliseconds(100);
-
     return initResult;
 }
 
 bme280_error_code_t BME280_GetSensorData(bme280_device_t * const device)
 {
-    bme280_error_code_t acquisitionResult = BME280_CheckNull(device);
+    bme280_error_code_t acquisitionResult = BME280_OK;
+
+    uint8_t data[BME280_DATA_LENGTH] = { 0 };
+    bme280_uncompensated_data_t uncompensatedData = { 0 };
+
+    acquisitionResult = BME280_GetRegisters(device, BME280_DATA_ADDRESS, data, BME280_DATA_LENGTH);
 
     if (acquisitionResult == BME280_OK)
     {
-        uint8_t data[BME280_DATA_LENGTH] = { 0 };
-        bme280_uncompensated_data_t uncompensatedData = { 0 };
+        BME280_ParseSensorData(&uncompensatedData, data);
 
-        acquisitionResult = BME280_GetRegisters(device, BME280_DATA_ADDRESS, data, BME280_DATA_LENGTH);
+        LOG_INFO("Acquired raw sensor data from BME280");
 
-        if (acquisitionResult == BME280_OK)
-        {
-            BME280_ParseSensorData(&uncompensatedData, data);
-
-            LOG_INFO("Acquired raw sensor data from BME280");
-
-            acquisitionResult = BME280_CompensateData(device, &uncompensatedData);
-        }
+        acquisitionResult = BME280_CompensateData(device, &uncompensatedData);
     }
 
     if (acquisitionResult == BME280_OK)

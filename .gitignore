@@ -134,6 +134,7 @@ nbproject/Makefile-*
 disassembly/
 .generated_files/
 private/
+.ca/
 
 ### VisualStudioCode ###
 .vscode/*

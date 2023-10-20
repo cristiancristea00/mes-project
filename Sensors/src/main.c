@@ -14,6 +14,7 @@
 
 #include <avr/io.h>
 
+#include <stdio.h>
 #include <stdbool.h>
 
 
@@ -25,11 +26,7 @@ void main(void)
     SetClockFrequency(CLKCTRL_FRQSEL_24M_gc);
 
     uart1.Initialize(460800);
-    i2c0.Initialize(I2C_MODE_STANDARD);
-    
-    PauseMiliseconds(5000);
-    printf("Hello from AVR128DA48!\n\r");
-    ScanBus();
+    i2c0.Initialize(I2C_MODE_FAST);
     
     bme280_device_t weatherClick;
     
@@ -37,10 +34,14 @@ void main(void)
         .temperatureOversampling = BME280_OVERSAMPLING_16X,
         .pressureOversampling = BME280_OVERSAMPLING_16X,
         .humidityOversampling = BME280_OVERSAMPLING_16X,
-        .iirFilterCoefficients = BME280_IIR_FILTER_8,
+        .iirFilterCoefficients = BME280_IIR_FILTER_16,
         .powerMode = BME280_NORMAL_MODE,
-        .standbyTime = BME280_STANDBY_TIME_500_MS
+        .standbyTime = BME280_STANDBY_TIME_250_MS
     };
+    
+    PauseMiliseconds(5000);
+    printf("Hello from AVR128DA48!\n\r");
+    ScanBus();
     
     BME280_Inititialize(&weatherClick, &BME280_I2C_Handler, &i2c0, BME280_I2C_ADDRESS, &settings);
     

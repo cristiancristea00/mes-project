@@ -9,6 +9,8 @@
       <itemPath>../include/utils.h</itemPath>
       <itemPath>../include/vector.h</itemPath>
       <itemPath>include/spi.h</itemPath>
+      <itemPath>include/oled.h</itemPath>
+      <itemPath>include/oled-draw.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -22,6 +24,8 @@
       <itemPath>../src/config.c</itemPath>
       <itemPath>../src/vector.c</itemPath>
       <itemPath>src/spi.c</itemPath>
+      <itemPath>src/oled.c</itemPath>
+      <itemPath>src/oled-draw.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -46,7 +50,7 @@
         <platformTool>nEdbgTool</platformTool>
         <languageToolchain>XC8</languageToolchain>
         <languageToolchainVersion>2.45</languageToolchainVersion>
-        <platform>2</platform>
+        <platform>3</platform>
       </toolsSet>
       <packs>
         <pack name="AVR-Dx_DFP" vendor="Microchip" version="2.3.272"/>
@@ -285,7 +289,7 @@
         <platformTool>nEdbgTool</platformTool>
         <languageToolchain>XC8</languageToolchain>
         <languageToolchainVersion>2.45</languageToolchainVersion>
-        <platform>2</platform>
+        <platform>3</platform>
       </toolsSet>
       <packs>
         <pack name="AVR-Dx_DFP" vendor="Microchip" version="2.3.272"/>
@@ -350,7 +354,7 @@
         <property key="verbose" value="false"/>
         <property key="warning-level" value="-3"/>
         <property key="what-to-do" value="ignore"/>
-        <appendMe value="-Wall -Wextra -Wpedantic -Wunused -Wfatal-errors -Winline -Wshadow -Wunreachable-code -Wwrite-strings -Wredundant-decls -Wmissing-prototypes -Wno-unused-function -Winline -Wno-incompatible-pointer-types -Wno-main -Wno-implicit-int -Wno-unknown-pragmas"/>
+        <appendMe value="-Wall -Wextra -Wpedantic -Wunused -Wfatal-errors -Winline -Wshadow -Wunreachable-code -Wwrite-strings -Wredundant-decls -Wmissing-prototypes -Wno-unused-function -Winline -Wno-incompatible-pointer-types -Wno-main -Wno-implicit-int -Wno-unknown-pragmas -mrelax -flto"/>
       </HI-TECH-COMP>
       <HI-TECH-LINK>
         <property key="additional-options-checksum" value=""/>

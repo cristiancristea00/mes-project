@@ -34,10 +34,10 @@
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
 
-#define UART_PRINTF    ( true )    // Enable/Disable printf functionality on UART.
-#define LOGGING        ( true )    // Enable/Disable logging
+#define UART_PRINTF    // Enable/Disable printf functionality on UART
+// #define LOGGING     // Enable/Disable logging
 
-#if LOGGING == true
+#if defined ( __DEBUG ) || defined ( LOGGING )
 
 #define LOG_DEBUG_PRINTF(STRING, ...)      do { printf("[DEBUG]: " STRING "\n\r", ##__VA_ARGS__); } while (false)
 #define LOG_INFO_PRINTF(STRING, ...)       do { printf("[INFO]: " STRING "\n\r", ##__VA_ARGS__); } while (false)
@@ -70,7 +70,7 @@
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
 
-#if LOGGING == true
+#if defined ( __DEBUG ) || defined ( LOGGING )
 
 #include <stdio.h>
 
