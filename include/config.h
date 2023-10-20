@@ -37,23 +37,17 @@
 #define UART_PRINTF    ( true )    // Enable/Disable printf functionality on UART.
 #define LOGGING        ( true )    // Enable/Disable logging
 
-#define EnableGlobalInterrupts()     do { sei(); } while (false)
-#define DisableGlobalInterrupts()    do { cli(); } while (false)
-
-#define PauseMiliseconds(MILIS)      do { _delay_ms((MILIS)); } while (false)
-#define PauseMicroseconds(MICROS)    do { _delay_us((MICROS)); } while (false)
-
 #if LOGGING == true
 
-#define LOG_DEBUG_PRINTF(STRING, ...)      do { printf("[DEBUG]: " STRING "\n\r", ##__VA_ARGS__) } while (false)
-#define LOG_INFO_PRINTF(STRING, ...)       do { printf("[INFO]: " STRING "\n\r", ##__VA_ARGS__) } while (false)
-#define LOG_WARNING_PRINTF(STRING, ...)    do { printf("[WARNING]: " STRING "\n\r", ##__VA_ARGS__) } while (false)
-#define LOG_ERROR_PRINTF(STRING, ...)      do { printf("[ERROR]: " STRING "\n\r", ##__VA_ARGS__) } while (false)
+#define LOG_DEBUG_PRINTF(STRING, ...)      do { printf("[DEBUG]: " STRING "\n\r", ##__VA_ARGS__); } while (false)
+#define LOG_INFO_PRINTF(STRING, ...)       do { printf("[INFO]: " STRING "\n\r", ##__VA_ARGS__); } while (false)
+#define LOG_WARNING_PRINTF(STRING, ...)    do { printf("[WARNING]: " STRING "\n\r", ##__VA_ARGS__); } while (false)
+#define LOG_ERROR_PRINTF(STRING, ...)      do { printf("[ERROR]: " STRING "\n\r", ##__VA_ARGS__); } while (false)
 
-#define LOG_DEBUG(STRING)                  do { PrintForLogging("[DEBUG]: " STRING "\n\r") } while (false)
-#define LOG_INFO(STRING)                   do { PrintForLogging("[INFO]: " STRING "\n\r") } while (false)
-#define LOG_WARNING(STRING)                do { PrintForLogging("[WARNING]: " STRING "\n\r") } while (false)
-#define LOG_ERROR(STRING)                  do { PrintForLogging("[ERROR]: " STRING "\n\r") } while (false)
+#define LOG_DEBUG(STRING)                  do { PrintForLogging("[DEBUG]: " STRING "\n\r"); } while (false)
+#define LOG_INFO(STRING)                   do { PrintForLogging("[INFO]: " STRING "\n\r"); } while (false)
+#define LOG_WARNING(STRING)                do { PrintForLogging("[WARNING]: " STRING "\n\r"); } while (false)
+#define LOG_ERROR(STRING)                  do { PrintForLogging("[ERROR]: " STRING "\n\r"); } while (false)
 
 #else
 

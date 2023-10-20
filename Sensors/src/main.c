@@ -7,9 +7,10 @@
  **/
 
 
-#include "config.h"
+#include "utils.h"
 #include "uart.h"
 #include "i2c.h"
+#include "bme280.h"
 
 #include <avr/io.h>
 
@@ -26,10 +27,31 @@ void main(void)
     uart1.Initialize(460800);
     i2c0.Initialize(I2C_MODE_STANDARD);
     
+    PauseMiliseconds(5000);
+    printf("Hello from AVR128DA48!\n\r");
+    ScanBus();
+    
+    bme280_device_t weatherClick;
+    
+    bme280_settings_t settings = {
+        .temperatureOversampling = BME280_OVERSAMPLING_16X,
+        .pressureOversampling = BME280_OVERSAMPLING_16X,
+        .humidityOversampling = BME280_OVERSAMPLING_16X,
+        .iirFilterCoefficients = BME280_IIR_FILTER_8,
+        .powerMode = BME280_NORMAL_MODE,
+        .standbyTime = BME280_STANDBY_TIME_500_MS
+    };
+    
+    BME280_Inititialize(&weatherClick, &BME280_I2C_Handler, &i2c0, BME280_I2C_ADDRESS, &settings);
+    
     while (true) 
     {
-        printf("Hello from AVR128DA48!\n\r");
-        ScanBus();
+        if (BME280_GetSensorData(&weatherClick) == BME280_OK)
+        {
+            printf("Temperature: %0.2lf °C\n\r", BME280_GetDisplayTemperature(&weatherClick.data));
+            printf("Pressure: %0.2lf hPa\n\r", BME280_GetDisplayPressure(&weatherClick.data));
+            printf("Relative humidity: %0.2lf %c\n\r", BME280_GetDisplayHumidity(&weatherClick.data), '%');
+        }
         PauseMiliseconds(5000);
     }
 }

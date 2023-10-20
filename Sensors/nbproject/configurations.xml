@@ -7,7 +7,9 @@
       <itemPath>../include/uart.h</itemPath>
       <itemPath>../include/config.h</itemPath>
       <itemPath>../include/utils.h</itemPath>
-      <itemPath>../include/i2c.h</itemPath>
+      <itemPath>../include/vector.h</itemPath>
+      <itemPath>include/i2c.h</itemPath>
+      <itemPath>include/bme280.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -19,7 +21,9 @@
       <itemPath>src/main.c</itemPath>
       <itemPath>../src/uart.c</itemPath>
       <itemPath>../src/config.c</itemPath>
-      <itemPath>../src/i2c.c</itemPath>
+      <itemPath>../src/vector.c</itemPath>
+      <itemPath>src/i2c.c</itemPath>
+      <itemPath>src/bme280.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -31,6 +35,7 @@
     <Elem>../src</Elem>
     <Elem>src</Elem>
     <Elem>../include</Elem>
+    <Elem>include</Elem>
   </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
