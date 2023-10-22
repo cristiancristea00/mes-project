@@ -46,3 +46,7 @@
 
 #define PauseMiliseconds(MILIS)      do { _delay_ms((MILIS)); } while (false)
 #define PauseMicroseconds(MICROS)    do { _delay_us((MICROS)); } while (false)
+
+// Force inline for static functions
+
+#define STATIC_INLINE    __attribute__((always_inline)) static inline

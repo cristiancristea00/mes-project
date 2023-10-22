@@ -907,7 +907,7 @@ static bme280_error_code_t BME280_WritePowerMode(bme280_device_t * const device,
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
 
-bme280_error_code_t BME280_Inititialize(bme280_device_t * const device, bme280_handler_t const * const handler, i2c_t const * const i2cDevice, uint8_t const i2cAddress, bme280_settings_t const * const settings)
+bme280_error_code_t BME280_Initialize(bme280_device_t * const device, bme280_handler_t const * const handler, i2c_t const * const i2cDevice, uint8_t const i2cAddress, bme280_settings_t const * const settings)
 {
     LOG_INFO("Started BME280 initialization");
 
