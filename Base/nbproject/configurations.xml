@@ -8,6 +8,8 @@
       <itemPath>../include/config.h</itemPath>
       <itemPath>../include/utils.h</itemPath>
       <itemPath>../include/vector.h</itemPath>
+      <itemPath>../include/crc8.h</itemPath>
+      <itemPath>../include/bluetooth.h</itemPath>
       <itemPath>include/spi.h</itemPath>
       <itemPath>include/oled.h</itemPath>
       <itemPath>include/oled-draw.h</itemPath>
@@ -23,6 +25,8 @@
       <itemPath>../src/uart.c</itemPath>
       <itemPath>../src/config.c</itemPath>
       <itemPath>../src/vector.c</itemPath>
+      <itemPath>../src/crc8.c</itemPath>
+      <itemPath>../src/bluetooth.c</itemPath>
       <itemPath>src/spi.c</itemPath>
       <itemPath>src/oled.c</itemPath>
       <itemPath>src/oled-draw.c</itemPath>
