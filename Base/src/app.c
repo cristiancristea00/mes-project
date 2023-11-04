@@ -89,8 +89,16 @@ STATIC_INLINE void SystemInitialize(void)
 {
     SetClockFrequency(CLKCTRL_FRQSEL_24M_gc);
 
+#if defined __AVR128DA48__
     uart1.Initialize(460800);
     uart0.InitializeWithReceive(460800, BLUETOOTH_ReceiveCallback);
+#elif defined __AVR64DD32__
+    uart0.Initialize(460800);
+    uart1.InitializeWithReceive(460800, BLUETOOTH_ReceiveCallback);
+#else
+    #error "Invalid device!"
+#endif
+    
     spi0.Initialize();
 
     return;
@@ -102,7 +110,13 @@ STATIC_INLINE void ModulesInitialize(oled_device_t * const oled , bluetooth_devi
     OLED_SetBackground(oled, black);
     DisplaySetup(oled);
 
+#if defined __AVR128DA48__
     BLUETOOTH_Initialize(bluetooth, &uart0);
+#elif defined __AVR64DD32__
+    BLUETOOTH_Initialize(bluetooth, &uart1);
+#else
+    #error "Invalid device!"
+#endif
 
     return;
 }
@@ -250,6 +264,16 @@ void Application_Run(void)
     ModulesInitialize(&oledc, &bluetooth);
 
     bme280_data_t sensorsData;
+
+    PauseMiliseconds(5000);
+    
+#if defined __AVR128DA48__
+    uart1.Print("Hello from AVR128DA48 - Base station!\n\r");
+#elif defined __AVR64DD32__
+    uart0.Print("Hello from AVR64DD32 - Base station!\n\r");
+#else
+    #error "Invalid device!"
+#endif
 
     while (true)
     {

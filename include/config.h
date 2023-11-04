@@ -35,7 +35,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #define UART_PRINTF    // Enable/Disable printf functionality on UART
-// #define LOGGING     // Enable/Disable logging
+#define LOGGING        // Enable/Disable logging
 
 #if defined ( __DEBUG ) || defined ( LOGGING )
 

@@ -118,19 +118,53 @@ static spi_error_code_t SPI0_ExchangeData(uint8_t * const dataForExchange, uint8
 
 __attribute__((always_inline)) inline static void SPI0_Inititialize(void)
 {
-    // PA4 - MOSI - OUT | PA5 - MISO - IN | PA6 - SCK - OUT | PA7 - CS - OUT
-    PORTA.DIRSET = PIN4_bm | PIN6_bm | PIN7_bm;
+    // PA4 - MOSI - OUT | PA5 - MISO - IN | PA6 - SCK - OUT
+    PORTA.DIRSET = PIN4_bm | PIN6_bm;
     PORTA.DIRCLR = PIN5_bm;
 
-    // PA4 - MOSI - LOW | PA6 - SCK - HIGH | PA7 - CS - HIGH
-    PORTA.OUTCLR = PIN4_bm | PIN6_bm;
-    PORTA.OUTSET = PIN7_bm;
+    // PA4 - MOSI - LOW | PA6 - SCK - HIGH
+    PORTA.OUTCLR = PIN4_bm;
+    PORTA.OUTSET = PIN6_bm;
 
     // Disable internal pull-ups
     PORTA.PIN4CTRL &= ~PORT_PULLUPEN_bm;
     PORTA.PIN5CTRL &= ~PORT_PULLUPEN_bm;
     PORTA.PIN6CTRL &= ~PORT_PULLUPEN_bm;
     PORTA.PIN7CTRL &= ~PORT_PULLUPEN_bm;
+    
+#if defined __AVR128DA48__
+    // CS - OUT
+    PORTA.DIRSET = PIN7_bm;
+    PORTE.DIRSET = PIN2_bm;
+    PORTE.DIRSET = PIN3_bm;
+    
+    // CS - HIGH
+    PORTA.OUTSET = PIN7_bm;
+    PORTE.OUTSET = PIN2_bm;
+    PORTE.OUTSET = PIN3_bm;
+    
+    // Disable internal pull-ups
+    PORTA.PIN7CTRL &= ~PORT_PULLUPEN_bm;
+    PORTE.PIN2CTRL &= ~PORT_PULLUPEN_bm;
+    PORTE.PIN3CTRL &= ~PORT_PULLUPEN_bm;
+#elif defined __AVR64DD32__
+    // CS - OUT
+    PORTA.DIRSET = PIN7_bm;
+    PORTC.DIRSET = PIN2_bm;
+    PORTC.DIRSET = PIN3_bm;
+    
+    // CS - HIGH
+    PORTA.OUTSET = PIN7_bm;
+    PORTC.OUTSET = PIN2_bm;
+    PORTC.OUTSET = PIN3_bm;
+    
+    // Disable internal pull-ups
+    PORTA.PIN7CTRL &= ~PORT_PULLUPEN_bm;
+    PORTC.PIN2CTRL &= ~PORT_PULLUPEN_bm;
+    PORTC.PIN3CTRL &= ~PORT_PULLUPEN_bm;
+#else
+    #error "Invalid device!"
+#endif
 
     SPI0.CTRLB = SPI_SSD_bm | SPI_MODE_0_gc;
 
@@ -215,10 +249,22 @@ __attribute__((always_inline)) inline static void SPI0_ClientSelect(spi_chip_sel
             PORTA.OUTCLR = PIN7_bm;
             break;
         case SPI_CS2:
+#if defined __AVR128DA48__
             PORTE.OUTCLR = PIN2_bm;
+#elif defined __AVR64DD32__
+            PORTC.OUTCLR = PIN2_bm;
+#else
+    #error "Invalid device!"
+#endif
             break;
         case SPI_CS3:
+#if defined __AVR128DA48__
             PORTE.OUTCLR = PIN3_bm;
+#elif defined __AVR64DD32__
+            PORTC.OUTCLR = PIN3_bm;
+#else
+    #error "Invalid device!"
+#endif
             break;
         default:
             LOG_ERROR("Invalid SPI chip select pin");
@@ -236,10 +282,22 @@ __attribute__((always_inline)) inline static void SPI0_ClientDeselect(spi_chip_s
             PORTA.OUTSET = PIN7_bm;
             break;
         case SPI_CS2:
+#if defined __AVR128DA48__
             PORTE.OUTSET = PIN2_bm;
+#elif defined __AVR64DD32__
+            PORTC.OUTSET = PIN2_bm;
+#else
+    #error "Invalid device!"
+#endif
             break;
         case SPI_CS3:
+#if defined __AVR128DA48__
             PORTE.OUTSET = PIN3_bm;
+#elif defined __AVR64DD32__
+            PORTC.OUTSET = PIN3_bm;
+#else
+    #error "Invalid device!"
+#endif
             break;
         default:
             LOG_WARNING("Invalid SPI chip select pin");

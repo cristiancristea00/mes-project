@@ -143,12 +143,23 @@ __attribute__((always_inline)) inline static void I2C0_EndTransation(void);
 
 __attribute__((always_inline)) inline static void I2C0_Inititialize(i2c_mode_t const mode)
 {
+#if defined __AVR128DA48__
     // Select I2C pins to PC2 - SDA and PC3 - SCL
     PORTMUX.TWIROUTEA = PORTMUX_TWI0_ALT2_gc;
 
     // Enable internal pull-ups
     PORTC.PIN2CTRL = PORT_PULLUPEN_bm;
     PORTC.PIN3CTRL = PORT_PULLUPEN_bm;
+#elif defined __AVR64DD32__
+    // Select I2C pins to PA2 - SDA and PA3 - SCL
+    PORTMUX.TWIROUTEA = PORTMUX_TWI0_ALT1_gc;
+
+    // Enable internal pull-ups
+    PORTA.PIN2CTRL = PORT_PULLUPEN_bm;
+    PORTA.PIN3CTRL = PORT_PULLUPEN_bm;
+#else
+    #error "Invalid device!"
+#endif
 
     // Host baud rate control
     TWI0.MBAUD = (uint8_t) mode;

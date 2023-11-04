@@ -120,6 +120,8 @@ Temporary Items
 *.properties
 *.production
 *.debug
+*.log
+*.log.inx
 html/
 nbproject/private/
 nbproject/Package-*.bash

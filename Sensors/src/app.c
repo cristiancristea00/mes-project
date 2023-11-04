@@ -60,8 +60,16 @@ STATIC_INLINE void SystemInitialize(void)
 {
     SetClockFrequency(CLKCTRL_FRQSEL_24M_gc);
 
+#if defined __AVR128DA48__
     uart1.Initialize(460800);
     uart0.InitializeWithReceive(460800, BLUETOOTH_ReceiveCallback);
+#elif defined __AVR64DD32__
+    uart0.Initialize(460800);
+    uart1.InitializeWithReceive(460800, BLUETOOTH_ReceiveCallback);
+#else
+    #error "Invalid device!"
+#endif
+    
     i2c0.Initialize(I2C_MODE_FAST_PLUS);
 
     return;
@@ -80,7 +88,13 @@ STATIC_INLINE void ModulesInitialize(bme280_device_t * const bme280, bluetooth_d
     
     BME280_Initialize(bme280, &BME280_I2C_Handler, &i2c0, BME280_I2C_ADDRESS, &settings);
 
+#if defined __AVR128DA48__
     BLUETOOTH_Initialize(bluetooth, &uart0);
+#elif defined __AVR64DD32__
+    BLUETOOTH_Initialize(bluetooth, &uart1);
+#else
+    #error "Invalid device!"
+#endif
 
     return;
 }
@@ -114,7 +128,13 @@ void Application_Run(void)
 
     PauseMiliseconds(5000);
     
+#if defined __AVR128DA48__
     uart1.Print("Hello from AVR128DA48 - Sensors station!\n\r");
+#elif defined __AVR64DD32__
+    uart0.Print("Hello from AVR64DD32 - Sensors station!\n\r");
+#else
+    #error "Invalid device!"
+#endif
 
     while (true)
     {

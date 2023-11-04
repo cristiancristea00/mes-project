@@ -60,7 +60,13 @@ __attribute__((always_inline)) inline void TightLoopContents(void)
 
 __attribute__((always_inline)) inline void PrintForLogging(char const * const message)
 {
+#if defined __AVR128DA48__
     uart1.Print(message);
+#elif defined __AVR64DD32__
+    uart0.Print(message);
+#else
+    #error "Invalid device!"
+#endif
 
     return;
 }

@@ -118,6 +118,19 @@ __attribute__((always_inline)) inline static bool UART0_TXBusy(void);
  **/
 __attribute__((always_inline)) inline static void UART0_RegisterCallback(uart_callback_t const callback);
 
+#if ( defined UART_PRINTF ) && ( defined __AVR64DD32__ )
+
+/**
+ * @brief Wrapper around the @ref UART0_PrintChar function to make it compatible
+ *        with the C stream interface.
+ * @param[in] character The character to be sent
+ * @param[in] stream The stream used to send the character
+ * @return int8_t Always returns 0
+ **/
+__attribute__((always_inline)) inline static int8_t UART0_SendChar(char const character, FILE * const stream);
+
+#endif // UART_PRINTF && __AVR64DD32__
+
 /*******************************************************************************
  *                                                                             *
  *                                    UART1                                    *
@@ -190,7 +203,7 @@ __attribute__((always_inline)) inline static bool UART1_TXBusy(void);
  **/
 __attribute__((always_inline)) inline static void UART1_RegisterCallback(uart_callback_t const callback);
 
-#if defined UART_PRINTF
+#if ( defined UART_PRINTF ) && ( defined __AVR128DA48__ )
 
 /**
  * @brief Wrapper around the @ref UART1_PrintChar function to make it compatible
@@ -201,7 +214,7 @@ __attribute__((always_inline)) inline static void UART1_RegisterCallback(uart_ca
  **/
 __attribute__((always_inline)) inline static int8_t UART1_SendChar(char const character, FILE * const stream);
 
-#endif // UART_PRINTF
+#endif // UART_PRINTF && __AVR128DA48__
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -224,7 +237,13 @@ __attribute__((always_inline)) inline static void UART0_InitializeWithReceive(ui
 
     UART0_Initialize(baudRate);
 
+#if defined __AVR128DA48__
     PORTA.DIRCLR = PIN1_bm;
+#elif defined __AVR64DD32__
+    PORTD.DIRCLR = PIN5_bm;
+#else
+    #error "Invalid device!"
+#endif
 
     USART0.CTRLA = USART_RXCIE_bm;
 
@@ -233,11 +252,37 @@ __attribute__((always_inline)) inline static void UART0_InitializeWithReceive(ui
     return;
 }
 
+#if ( defined UART_PRINTF ) && ( defined __AVR64DD32__ )
+
+__attribute__((always_inline)) inline static int8_t UART0_SendChar(char const character, __attribute__((unused)) FILE * const stream)
+{
+    UART0_PrintChar(character);
+
+    return 0;
+}
+
+static FILE uart0Stream = FDEV_SETUP_STREAM(UART0_SendChar, NULL, _FDEV_SETUP_WRITE);
+
+#endif // UART_PRINTF && __AVR64DD32__
+
 __attribute__((always_inline)) inline static void UART0_Initialize(uint32_t const baudRate)
 {
-    PORTA.DIRSET = PIN0_bm;
+#if ( defined UART_PRINTF ) && ( defined __AVR64DD32__ )
 
+    stdout = &uart0Stream;
+
+#endif // UART_PRINTF && __AVR64DD32__
+
+#if defined __AVR128DA48__
+    PORTA.DIRSET = PIN0_bm;
     PORTA.OUTSET = PIN0_bm;
+#elif defined __AVR64DD32__
+    PORTMUX.USARTROUTEA = PORTMUX_USART0_ALT3_gc;
+    PORTD.DIRSET = PIN4_bm;
+    PORTD.OUTSET = PIN4_bm;
+#else
+    #error "Invalid device!"
+#endif
 
     USART0.BAUD = UART_BAUD_RATE(baudRate);
 
@@ -331,7 +376,7 @@ __attribute__((always_inline)) inline static void UART1_InitializeWithReceive(ui
     return;
 }
 
-#if defined UART_PRINTF
+#if ( defined UART_PRINTF ) && ( defined __AVR128DA48__ )
 
 __attribute__((always_inline)) inline static int8_t UART1_SendChar(char const character, __attribute__((unused)) FILE * const stream)
 {
@@ -340,20 +385,19 @@ __attribute__((always_inline)) inline static int8_t UART1_SendChar(char const ch
     return 0;
 }
 
-static FILE uart_1_stream = FDEV_SETUP_STREAM(UART1_SendChar, NULL, _FDEV_SETUP_WRITE);
+static FILE uart1Stream = FDEV_SETUP_STREAM(UART1_SendChar, NULL, _FDEV_SETUP_WRITE);
 
-#endif // UART_PRINTF
+#endif // UART_PRINTF && __AVR128DA48__
 
 __attribute__((always_inline)) inline static void UART1_Initialize(uint32_t const baudRate)
 {
-#if defined UART_PRINTF
+#if ( defined UART_PRINTF ) && ( defined __AVR128DA48__ )
 
-    stdout = &uart_1_stream;
+    stdout = &uart1Stream;
 
-#endif // UART_PRINTF
+#endif // UART_PRINTF && __AVR128DA48__
 
     PORTC.DIRSET = PIN0_bm;
-
     PORTC.OUTSET = PIN0_bm;
 
     USART1.BAUD = UART_BAUD_RATE(baudRate);
