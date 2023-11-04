@@ -136,6 +136,8 @@ void Application_Run(void)
     #error "Invalid device!"
 #endif
 
+    EnableGlobalInterrupts();
+
     while (true)
     {
         if (BME280_GetSensorData(&weatherClick) == BME280_OK)

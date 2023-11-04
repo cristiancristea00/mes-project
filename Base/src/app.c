@@ -153,7 +153,7 @@ STATIC_INLINE void DisplayData(bme280_data_t const * const sensorsData, oled_dev
     temperaturetTextParameters.string.scale_x = 1;
     temperaturetTextParameters.string.scale_y = 1;
     temperaturetTextParameters.string.start = temperatureTextStart;
-    temperaturetTextParameters.string.data = (uint8_t *) temperatureBuffer;
+    temperaturetTextParameters.string.data = (uint8_t const *) temperatureBuffer;
     oled_shape_t temperatureText;
     OLED_SetShape(&temperatureText, OLED_SHAPE_STRING, &temperaturetTextParameters, white);
 
@@ -161,7 +161,7 @@ STATIC_INLINE void DisplayData(bme280_data_t const * const sensorsData, oled_dev
     pressureTextParameters.string.scale_x = 1;
     pressureTextParameters.string.scale_y = 1;
     pressureTextParameters.string.start = pressureTextStart;
-    pressureTextParameters.string.data = (uint8_t *) pressureBuffer;
+    pressureTextParameters.string.data = (uint8_t const *) pressureBuffer;
     oled_shape_t pressureText;
     OLED_SetShape(&pressureText, OLED_SHAPE_STRING, &pressureTextParameters, white);
 
@@ -169,7 +169,7 @@ STATIC_INLINE void DisplayData(bme280_data_t const * const sensorsData, oled_dev
     humidityTextParameters.string.scale_x = 1;
     humidityTextParameters.string.scale_y = 1;
     humidityTextParameters.string.start = humidityTextStart;
-    humidityTextParameters.string.data = (uint8_t *) humidityBuffer;
+    humidityTextParameters.string.data = (uint8_t const *) humidityBuffer;
     oled_shape_t humidityText;
     OLED_SetShape(&humidityText, OLED_SHAPE_STRING, &humidityTextParameters, white);
 
@@ -274,6 +274,8 @@ void Application_Run(void)
 #else
     #error "Invalid device!"
 #endif
+
+    EnableGlobalInterrupts();
 
     while (true)
     {
