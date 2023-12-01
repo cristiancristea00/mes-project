@@ -16,6 +16,7 @@
 #include "uart.h"
 
 #include "config.h"
+#include "utils.h"
 
 #include <avr/interrupt.h>
 #include <util/atomic.h>
@@ -62,7 +63,7 @@
  *                            received
  * @return None
  **/
-__attribute__((always_inline)) inline static void UART0_InitializeWithReceive(uint32_t const baudRate, uart_callback_t const receiveCallback);
+STATIC_INLINE void UART0_InitializeWithReceive(uint32_t const baudRate, uart_callback_t const receiveCallback);
 
 /**
  * @brief Initializes the UART0 module by setting the baud rate and enabling the
@@ -71,7 +72,7 @@ __attribute__((always_inline)) inline static void UART0_InitializeWithReceive(ui
  * @param[in] baudRate The baud rate
  * @return None
  **/
-__attribute__((always_inline)) inline static void UART0_Initialize(uint32_t const baudRate);
+STATIC_INLINE void UART0_Initialize(uint32_t const baudRate);
 
 /**
  * @brief Sends a null-terminated string over UART0.
@@ -85,7 +86,7 @@ static void UART0_Print(char const * const string);
  * @param[in] character The character to be sent
  * @return None
  */
-__attribute__((always_inline)) inline static void UART0_PrintChar(char const character);
+STATIC_INLINE void UART0_PrintChar(char const character);
 
 /**
  * @brief Sends a number of bytes over UART0.
@@ -108,7 +109,7 @@ static void UART0_SendByte(uint8_t const dataByte);
  * @retval true The UART1 module is busy.
  * @retval false The UART1 module is ready.
  **/
-__attribute__((always_inline)) inline static bool UART0_TXBusy(void);
+STATIC_INLINE bool UART0_TXBusy(void);
 
 /**
  * @brief Registers a callback function to be called when a byte is received
@@ -116,7 +117,7 @@ __attribute__((always_inline)) inline static bool UART0_TXBusy(void);
  * @param[in] callback The callback function to be registered
  * @return None
  **/
-__attribute__((always_inline)) inline static void UART0_RegisterCallback(uart_callback_t const callback);
+STATIC_INLINE void UART0_RegisterCallback(uart_callback_t const callback);
 
 #if ( defined UART_PRINTF ) && ( defined __AVR64DD32__ )
 
@@ -127,7 +128,7 @@ __attribute__((always_inline)) inline static void UART0_RegisterCallback(uart_ca
  * @param[in] stream The stream used to send the character
  * @return int8_t Always returns 0
  **/
-__attribute__((always_inline)) inline static int8_t UART0_SendChar(char const character, FILE * const stream);
+STATIC_INLINE int8_t UART0_SendChar(char const character, FILE * const stream);
 
 #endif // UART_PRINTF && __AVR64DD32__
 
@@ -147,7 +148,7 @@ __attribute__((always_inline)) inline static int8_t UART0_SendChar(char const ch
  *                        received
  * @return None
  **/
-__attribute__((always_inline)) inline static void UART1_InitializeWithReceive(uint32_t const baudRate, uart_callback_t const receiveCallback);
+STATIC_INLINE void UART1_InitializeWithReceive(uint32_t const baudRate, uart_callback_t const receiveCallback);
 
 /**
  * @brief Initializes the UART1 module by setting the baud rate and enabling the
@@ -156,7 +157,7 @@ __attribute__((always_inline)) inline static void UART1_InitializeWithReceive(ui
  * @param[in] baudRate The baud rate
  * @return None
  **/
-__attribute__((always_inline)) inline static void UART1_Initialize(uint32_t const baudRate);
+STATIC_INLINE void UART1_Initialize(uint32_t const baudRate);
 
 /**
  * @brief Sends a null-terminated string over UART1.
@@ -170,7 +171,7 @@ static void UART1_Print(char const * const string);
  * @param[in] character The character to be sent
  * @return None
  */
-__attribute__((always_inline)) inline static void UART1_PrintChar(char const character);
+STATIC_INLINE void UART1_PrintChar(char const character);
 
 /**
  * @brief Sends a number of bytes over UART1.
@@ -193,7 +194,7 @@ static void UART1_SendByte(uint8_t const dataByte);
  * @retval true The UART1 module is busy.
  * @retval false The UART1 module is ready.
  **/
-__attribute__((always_inline)) inline static bool UART1_TXBusy(void);
+STATIC_INLINE bool UART1_TXBusy(void);
 
 /**
  * @brief Registers a callback function to be called when a byte is received
@@ -201,7 +202,7 @@ __attribute__((always_inline)) inline static bool UART1_TXBusy(void);
  * @param[in] callback The callback function to be registered
  * @return None
  **/
-__attribute__((always_inline)) inline static void UART1_RegisterCallback(uart_callback_t const callback);
+STATIC_INLINE void UART1_RegisterCallback(uart_callback_t const callback);
 
 #if ( defined UART_PRINTF ) && ( defined __AVR128DA48__ )
 
@@ -212,7 +213,7 @@ __attribute__((always_inline)) inline static void UART1_RegisterCallback(uart_ca
  * @param[in] stream The stream used to send the character
  * @return int8_t Always returns 0
  **/
-__attribute__((always_inline)) inline static int8_t UART1_SendChar(char const character, FILE * const stream);
+STATIC_INLINE int8_t UART1_SendChar(char const character, FILE * const stream);
 
 #endif // UART_PRINTF && __AVR128DA48__
 
@@ -231,7 +232,7 @@ __attribute__((always_inline)) inline static int8_t UART1_SendChar(char const ch
 
 static uart_callback_t uart0Callback = NULL;
 
-__attribute__((always_inline)) inline static void UART0_InitializeWithReceive(uint32_t const baudRate, uart_callback_t const receiveCallback)
+STATIC_INLINE void UART0_InitializeWithReceive(uint32_t const baudRate, uart_callback_t const receiveCallback)
 {
     UART0_RegisterCallback(receiveCallback);
 
@@ -254,7 +255,7 @@ __attribute__((always_inline)) inline static void UART0_InitializeWithReceive(ui
 
 #if ( defined UART_PRINTF ) && ( defined __AVR64DD32__ )
 
-__attribute__((always_inline)) inline static int8_t UART0_SendChar(char const character, __attribute__((unused)) FILE * const stream)
+STATIC_INLINE int8_t UART0_SendChar(char const character, __attribute__((unused)) FILE * const stream)
 {
     UART0_PrintChar(character);
 
@@ -265,7 +266,7 @@ static FILE uart0Stream = FDEV_SETUP_STREAM(UART0_SendChar, NULL, _FDEV_SETUP_WR
 
 #endif // UART_PRINTF && __AVR64DD32__
 
-__attribute__((always_inline)) inline static void UART0_Initialize(uint32_t const baudRate)
+STATIC_INLINE void UART0_Initialize(uint32_t const baudRate)
 {
 #if ( defined UART_PRINTF ) && ( defined __AVR64DD32__ )
 
@@ -311,7 +312,7 @@ static void UART0_Print(char const * const string)
     return;
 }
 
-__attribute__((always_inline)) inline static void UART0_PrintChar(char const character)
+STATIC_INLINE void UART0_PrintChar(char const character)
 {
     UART0_SendByte((char) character);
 
@@ -340,12 +341,12 @@ static void UART0_SendByte(uint8_t const dataByte)
     return;
 }
 
-__attribute__((always_inline)) inline static inline bool UART0_TXBusy(void)
+STATIC_INLINE inline bool UART0_TXBusy(void)
 {
     return !(USART0.STATUS & USART_DREIF_bm);
 }
 
-__attribute__((always_inline)) inline static void UART0_RegisterCallback(uart_callback_t const callback)
+STATIC_INLINE void UART0_RegisterCallback(uart_callback_t const callback)
 {
     uart0Callback = callback;
 
@@ -361,7 +362,7 @@ __attribute__((always_inline)) inline static void UART0_RegisterCallback(uart_ca
 
 static uart_callback_t uart1Callback = NULL;
 
-__attribute__((always_inline)) inline static void UART1_InitializeWithReceive(uint32_t const baudRate, uart_callback_t const receiveCallback)
+STATIC_INLINE void UART1_InitializeWithReceive(uint32_t const baudRate, uart_callback_t const receiveCallback)
 {
     UART1_RegisterCallback(receiveCallback);
 
@@ -378,7 +379,7 @@ __attribute__((always_inline)) inline static void UART1_InitializeWithReceive(ui
 
 #if ( defined UART_PRINTF ) && ( defined __AVR128DA48__ )
 
-__attribute__((always_inline)) inline static int8_t UART1_SendChar(char const character, __attribute__((unused)) FILE * const stream)
+STATIC_INLINE int8_t UART1_SendChar(char const character, __attribute__((unused)) FILE * const stream)
 {
     UART1_PrintChar(character);
 
@@ -389,7 +390,7 @@ static FILE uart1Stream = FDEV_SETUP_STREAM(UART1_SendChar, NULL, _FDEV_SETUP_WR
 
 #endif // UART_PRINTF && __AVR128DA48__
 
-__attribute__((always_inline)) inline static void UART1_Initialize(uint32_t const baudRate)
+STATIC_INLINE void UART1_Initialize(uint32_t const baudRate)
 {
 #if ( defined UART_PRINTF ) && ( defined __AVR128DA48__ )
 
@@ -427,7 +428,7 @@ static void UART1_Print(char const * const string)
     return;
 }
 
-__attribute__((always_inline)) inline static void UART1_PrintChar(char const character)
+STATIC_INLINE void UART1_PrintChar(char const character)
 {
     UART1_SendByte((char) character);
 
@@ -456,12 +457,12 @@ static void UART1_SendByte(uint8_t const dataByte)
     return;
 }
 
-__attribute__((always_inline)) inline static inline bool UART1_TXBusy(void)
+STATIC_INLINE inline bool UART1_TXBusy(void)
 {
     return !(USART1.STATUS & USART_DREIF_bm);
 }
 
-__attribute__((always_inline)) inline static void UART1_RegisterCallback(uart_callback_t const callback)
+STATIC_INLINE void UART1_RegisterCallback(uart_callback_t const callback)
 {
     uart1Callback = callback;
 

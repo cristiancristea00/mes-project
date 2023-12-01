@@ -137,7 +137,7 @@ typedef struct BME280_UNCOMPENSATED_DATA
  * @retval BME280_OK If the device is valid
  * @retval BME280_NULL_POINTER If a NULL pointer was found
  **/
-__attribute__((always_inline)) inline static bme280_error_code_t BME280_CheckNull(bme280_device_t const * const device);
+STATIC_INLINE bme280_error_code_t BME280_CheckNull(bme280_device_t const * const device);
 
 /**
  * @brief Reads a number of one byte registers from the device using I2C and
@@ -361,7 +361,7 @@ static bme280_error_code_t BME280_WritePowerMode(bme280_device_t * const device,
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
 
-__attribute__((always_inline)) inline static bme280_error_code_t BME280_CheckNull(bme280_device_t const * const device)
+STATIC_INLINE bme280_error_code_t BME280_CheckNull(bme280_device_t const * const device)
 {
     if (device == NULL || device->handler == NULL || device->i2cDevice == NULL)
     {

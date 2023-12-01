@@ -94,7 +94,7 @@ static bluetooth_error_code_t BLUETOOTH_CheckNull(bluetooth_device_t const * con
  * @param[in] bufferSize Size of the buffer
  * @return None
  **/
-__attribute__((always_inline)) inline static void BLUETOOTH_SendPreparedData(bluetooth_device_t const * const device, uint8_t const * const buffer, uint8_t const bufferSize);
+STATIC_INLINE void BLUETOOTH_SendPreparedData(bluetooth_device_t const * const device, uint8_t const * const buffer, uint8_t const bufferSize);
 
 /**
  * @brief Waits for 500 miliseconds to receive a packet containing an ACK or
@@ -123,13 +123,13 @@ static bluetooth_response_t BLUETOOTH_GetResponseReceived(void);
  * @retval true The byte is the last byte of the packet
  * @retval false The byte is not the last byte of the packet
  **/
-__attribute__((always_inline)) inline static bool BLUETOOTH_IsLastByte(void);
+STATIC_INLINE bool BLUETOOTH_IsLastByte(void);
 
 /**
  * @brief Computes the number of reamining bytes to be received.
  * @return uint8_t Number of remaining bytes
  **/
-__attribute__((always_inline)) inline static uint8_t BLUETOOTH_GetNumberOfBytesToReceive(void);
+STATIC_INLINE uint8_t BLUETOOTH_GetNumberOfBytesToReceive(void);
 
 /**
  * @brief Computes the checksum of the received packet.
@@ -169,7 +169,7 @@ static void BLUETOOTH_SendNotAcknowledge(bluetooth_device_t const * const device
  * @param[in] response ACK or NACK
  * @return None
  **/
-__attribute__((always_inline)) inline static void BLUETOOTH_SendResponse(bluetooth_device_t const * const device, bluetooth_response_t const response);
+STATIC_INLINE void BLUETOOTH_SendResponse(bluetooth_device_t const * const device, bluetooth_response_t const response);
 
 /**
  * @brief Computes the checksum of a byte buffer.
@@ -177,14 +177,14 @@ __attribute__((always_inline)) inline static void BLUETOOTH_SendResponse(bluetoo
  * @param[in] dataLength Length of the byte buffer
  * @return uint8_t The CRC8 checksum
  **/
-__attribute__((always_inline)) inline static uint8_t BLUETOOTH_ComputeChecksum(uint8_t const * const data, uint8_t const dataLength);
+STATIC_INLINE uint8_t BLUETOOTH_ComputeChecksum(uint8_t const * const data, uint8_t const dataLength);
 
 /**
  * @brief Ends the current transmission by clearing the vector and trasmission
  *        flag.
  * @return None
  **/
-__attribute__((always_inline)) inline static void BLUETOOTH_EndTransmission(void);
+STATIC_INLINE void BLUETOOTH_EndTransmission(void);
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -216,7 +216,7 @@ static bluetooth_error_code_t BLUETOOTH_CheckNull(bluetooth_device_t const * con
     }
 }
 
-__attribute__((always_inline)) inline static void BLUETOOTH_SendPreparedData(bluetooth_device_t const * const device, uint8_t const * const buffer, uint8_t const bufferSize)
+STATIC_INLINE void BLUETOOTH_SendPreparedData(bluetooth_device_t const * const device, uint8_t const * const buffer, uint8_t const bufferSize)
 {
     uint8_t const newLength = bufferSize + 2;
 
@@ -270,12 +270,12 @@ static bluetooth_response_t BLUETOOTH_GetResponseReceived(void)
     }
 }
 
-__attribute__((always_inline)) inline static bool BLUETOOTH_IsLastByte(void)
+STATIC_INLINE bool BLUETOOTH_IsLastByte(void)
 {
     return BLUETOOTH_GetNumberOfBytesToReceive() == receiveBuffer.bufferSize;
 }
 
-__attribute__((always_inline)) inline static uint8_t BLUETOOTH_GetNumberOfBytesToReceive(void)
+STATIC_INLINE uint8_t BLUETOOTH_GetNumberOfBytesToReceive(void)
 {
     return Vector_FirstByte(&receiveBuffer) + 1;
 }
@@ -317,7 +317,7 @@ static void BLUETOOTH_SendNotAcknowledge(bluetooth_device_t const * const device
     return;
 }
 
-__attribute__((always_inline)) inline static void BLUETOOTH_SendResponse(bluetooth_device_t const * const device, bluetooth_response_t const response)
+STATIC_INLINE void BLUETOOTH_SendResponse(bluetooth_device_t const * const device, bluetooth_response_t const response)
 {
     uint8_t packet[BLUETOOTH_ACK_NACK_SIZE] = { 0 };
 
@@ -330,12 +330,12 @@ __attribute__((always_inline)) inline static void BLUETOOTH_SendResponse(bluetoo
     return;
 }
 
-__attribute__((always_inline)) inline static uint8_t BLUETOOTH_ComputeChecksum(uint8_t const * const data, uint8_t const dataLength)
+STATIC_INLINE uint8_t BLUETOOTH_ComputeChecksum(uint8_t const * const data, uint8_t const dataLength)
 {
     return CRC8_Compute(data, dataLength + 1);
 }
 
-__attribute__((always_inline)) inline static void BLUETOOTH_EndTransmission(void)
+STATIC_INLINE void BLUETOOTH_EndTransmission(void)
 {
     transsmitionStatus = BLUETOOTH_IDLE;
     Vector_Clear(&receiveBuffer);

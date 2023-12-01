@@ -100,75 +100,75 @@ static oled_error_code_t OLED_CheckNull(oled_device_t const * const device);
  * @param[in] word Word to send
  * @return None
  **/
-__attribute__((always_inline)) inline static void OLED_SendWord(oled_device_t const * const device, uint16_t const word);
+STATIC_INLINE void OLED_SendWord(oled_device_t const * const device, uint16_t const word);
 
 /**
  * @brief Set as output and clear the OLED control pins.
  * @return None
  **/
-__attribute__((always_inline)) inline static void OLED_InitializePins(void);
+STATIC_INLINE void OLED_InitializePins(void);
 
 /**
  * @brief Enables OLED data mode.
  * @return None
  **/
-__attribute__((always_inline)) inline static void OLED_SetDataMode(void);
+STATIC_INLINE void OLED_SetDataMode(void);
 
 /**
  * @brief Enables OLED command mode.
  * @return None
  **/
-__attribute__((always_inline)) inline static void OLED_SetCommandMode(void);
+STATIC_INLINE void OLED_SetCommandMode(void);
 
 /**
  * @brief Enables OLED read mode.
  * @return None
  **/
-__attribute__((always_inline)) inline static void OLED_SetReadMode(void);
+STATIC_INLINE void OLED_SetReadMode(void);
 
 /**
  * @brief Enables OLED write mode.
  * @return None
  **/
-__attribute__((always_inline)) inline static void OLED_SetWriteMode(void);
+STATIC_INLINE void OLED_SetWriteMode(void);
 
 /**
  * @brief Sets the OLED reset pin.
  * @return None
  **/
-__attribute__((always_inline)) inline static void OLED_SetResetPin(void);
+STATIC_INLINE void OLED_SetResetPin(void);
 
 /**
  * @brief Clears the OLED reset pin.
  * @return None
  **/
-__attribute__((always_inline)) inline static void OLED_ClearResetPin(void);
+STATIC_INLINE void OLED_ClearResetPin(void);
 
 /**
  * @brief Sets the OLED enable pin.
  * @return None
  **/
-__attribute__((always_inline)) inline static void OLED_SetEnablePin(void);
+STATIC_INLINE void OLED_SetEnablePin(void);
 
 /**
  * @brief Clears the OLED enable pin.
  * @return None
  **/
-__attribute__((always_inline)) inline static void OLED_ClearEnablePin(void);
+STATIC_INLINE void OLED_ClearEnablePin(void);
 
 /**
  * @brief Sets the OLED chip select pin.
  * @param[in] device OLED device
  * @return None
  **/
-__attribute__((always_inline)) inline static void OLED_StartTransaction(oled_device_t const * const device);
+STATIC_INLINE void OLED_StartTransaction(oled_device_t const * const device);
 
 /**
  * @brief Clears the OLED chip select pin.
  * @param[in] device OLED device
  * @return None
  **/
-__attribute__((always_inline)) inline static void OLED_EndTransaction(oled_device_t const * const device);
+STATIC_INLINE void OLED_EndTransaction(oled_device_t const * const device);
 
 /**
  * @brief Sends the command to the OLED device that sets the row or column
@@ -180,28 +180,28 @@ __attribute__((always_inline)) inline static void OLED_EndTransaction(oled_devic
  * @param[in] offset RAM offset
  * @return None
  **/
-__attribute__((always_inline)) inline static void OLED_SetAddressBoundsWithOffset(oled_device_t const * const device, oled_command_t const command, uint8_t const min, uint8_t const max, uint8_t const offset);
+STATIC_INLINE void OLED_SetAddressBoundsWithOffset(oled_device_t const * const device, oled_command_t const command, uint8_t const min, uint8_t const max, uint8_t const offset);
 
 /**
  * @brief Sets the display initial set-up options.
  * @param[in] device OLED device
  * @return None
  **/
-__attribute__((always_inline)) inline static void OLED_SetDisplayOptions(oled_device_t const * const device);
+STATIC_INLINE void OLED_SetDisplayOptions(oled_device_t const * const device);
 
 /**
  * @brief Enables the OLED sleep mode.
  * @param[in] device OLED device
  * @return None
  **/
-__attribute__((always_inline)) inline static void OLED_EnableSleepMode(oled_device_t const * const device);
+STATIC_INLINE void OLED_EnableSleepMode(oled_device_t const * const device);
 
 /**
  * @brief Disables the OLED sleep mode.
  * @param[in] device OLED device
  * @return None
  **/
-__attribute__((always_inline)) inline static void OLED_DisableSleepMode(oled_device_t const * const device);
+STATIC_INLINE void OLED_DisableSleepMode(oled_device_t const * const device);
 
 /**
  * @brief Sends a command to the OLED device.
@@ -235,14 +235,14 @@ static oled_error_code_t OLED_CheckNull(oled_device_t const * const device)
     }
 }
 
-__attribute__((always_inline)) inline static void OLED_SendWord(oled_device_t const * const device, uint16_t const word)
+STATIC_INLINE void OLED_SendWord(oled_device_t const * const device, uint16_t const word)
 {
     uint8_t const dataBuffer[2] = { (uint8_t) (word >> 8), (uint8_t) (word & 0x00FF) };
 
     device->spiDevice->SendData(dataBuffer, 2);
 }
 
-__attribute__((always_inline)) inline static void OLED_InitializePins(void)
+STATIC_INLINE void OLED_InitializePins(void)
 {
     OLED_OUT(OLED_DATA_COMMAND);
     OLED_CLR(OLED_DATA_COMMAND);
@@ -259,77 +259,77 @@ __attribute__((always_inline)) inline static void OLED_InitializePins(void)
     return;
 }
 
-__attribute__((always_inline)) inline static void OLED_SetDataMode(void)
+STATIC_INLINE void OLED_SetDataMode(void)
 {
     OLED_SET(OLED_DATA_COMMAND);
 
     return;
 }
 
-__attribute__((always_inline)) inline static void OLED_SetCommandMode(void)
+STATIC_INLINE void OLED_SetCommandMode(void)
 {
     OLED_CLR(OLED_DATA_COMMAND);
 
     return;
 }
 
-__attribute__((always_inline)) inline static void OLED_SetReadMode(void)
+STATIC_INLINE void OLED_SetReadMode(void)
 {
     OLED_SET(OLED_READ_WRITE);
 
     return;
 }
 
-__attribute__((always_inline)) inline static void OLED_SetWriteMode(void)
+STATIC_INLINE void OLED_SetWriteMode(void)
 {
     OLED_CLR(OLED_READ_WRITE);
 
     return;
 }
 
-__attribute__((always_inline)) inline static void OLED_SetResetPin(void)
+STATIC_INLINE void OLED_SetResetPin(void)
 {
     OLED_SET(OLED_RESET);
 
     return;
 }
 
-__attribute__((always_inline)) inline static void OLED_ClearResetPin(void)
+STATIC_INLINE void OLED_ClearResetPin(void)
 {
     OLED_CLR(OLED_RESET);
 
     return;
 }
 
-__attribute__((always_inline)) inline static void OLED_SetEnablePin(void)
+STATIC_INLINE void OLED_SetEnablePin(void)
 {
     OLED_SET(OLED_ENABLE);
 
     return;
 }
 
-__attribute__((always_inline)) inline static void OLED_ClearEnablePin(void)
+STATIC_INLINE void OLED_ClearEnablePin(void)
 {
     OLED_CLR(OLED_ENABLE);
 
     return;
 }
 
-__attribute__((always_inline)) inline static void OLED_StartTransaction(oled_device_t const * const device)
+STATIC_INLINE void OLED_StartTransaction(oled_device_t const * const device)
 {
     device->spiDevice->ClientSelect(OLED_CHIP_SELECT);
 
     return;
 }
 
-__attribute__((always_inline)) inline static void OLED_EndTransaction(oled_device_t const * const device)
+STATIC_INLINE void OLED_EndTransaction(oled_device_t const * const device)
 {
     device->spiDevice->ClientDeselect(OLED_CHIP_SELECT);
 
     return;
 }
 
-__attribute__((always_inline)) inline static void OLED_SetAddressBoundsWithOffset(oled_device_t const * const device, oled_command_t const command, uint8_t const min, uint8_t const max, uint8_t const offset)
+STATIC_INLINE void OLED_SetAddressBoundsWithOffset(oled_device_t const * const device, oled_command_t const command, uint8_t const min, uint8_t const max, uint8_t const offset)
 {   
     uint8_t const payload[2] = {
         offset + (min > OLED_MAX_ADDRESS_BOUND ? OLED_MAX_ADDRESS_BOUND : min),
@@ -341,7 +341,7 @@ __attribute__((always_inline)) inline static void OLED_SetAddressBoundsWithOffse
     return;
 }
 
-__attribute__((always_inline)) inline static void OLED_SetDisplayOptions(oled_device_t const * const device)
+STATIC_INLINE void OLED_SetDisplayOptions(oled_device_t const * const device)
 {
     uint8_t payload = 0;
 
@@ -370,14 +370,14 @@ __attribute__((always_inline)) inline static void OLED_SetDisplayOptions(oled_de
     return;
 }
 
-__attribute__((always_inline)) inline static void OLED_EnableSleepMode(oled_device_t const * const device)
+STATIC_INLINE void OLED_EnableSleepMode(oled_device_t const * const device)
 {
     OLED_SendCommand(device, OLED_SET_SLEEP_MODE_ON, NULL, 0);
 
     return;
 }
 
-__attribute__((always_inline)) inline static void OLED_DisableSleepMode(oled_device_t const * const device)
+STATIC_INLINE void OLED_DisableSleepMode(oled_device_t const * const device)
 {
     OLED_SendCommand(device, OLED_SET_SLEEP_MODE_OFF, NULL, 0);
 
@@ -417,7 +417,7 @@ static oled_error_code_t OLED_SendCommand(oled_device_t const * const device, ol
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
 
-__attribute__((always_inline)) inline void OLED_Initialize(oled_device_t * const device, spi_t const * const spiDevice)
+INLINE void OLED_Initialize(oled_device_t * const device, spi_t const * const spiDevice)
 {
     OLED_InitializePins();
 
@@ -436,7 +436,7 @@ __attribute__((always_inline)) inline void OLED_Initialize(oled_device_t * const
     return;
 }
 
-__attribute__((always_inline)) inline void OLED_StartWritingDisplay(oled_device_t const * const device)
+INLINE void OLED_StartWritingDisplay(oled_device_t const * const device)
 {
     OLED_SendCommand(device, OLED_WRITE_RAM, NULL, 0);
 
@@ -446,7 +446,7 @@ __attribute__((always_inline)) inline void OLED_StartWritingDisplay(oled_device_
     return;
 }
 
-__attribute__((always_inline)) inline void OLED_StopWritingDisplay(oled_device_t const * const device)
+INLINE void OLED_StopWritingDisplay(oled_device_t const * const device)
 {
     OLED_EndTransaction(device);
     OLED_SetCommandMode();
@@ -484,21 +484,21 @@ oled_colour_t OLED_ParsePackedToRGB(oled_packed_colour_t const rawData)
     return parsedColour;
 }
 
-__attribute__((always_inline)) inline void OLED_SendColor(oled_device_t const * const device, oled_packed_colour_t const colour)
+INLINE void OLED_SendColor(oled_device_t const * const device, oled_packed_colour_t const colour)
 {
     OLED_SendWord(device, colour);
 
     return;
 }
 
-__attribute__((always_inline)) inline void OLED_SetRowAddressBounds(oled_device_t const * const device, uint8_t const min, uint8_t const max)
+INLINE void OLED_SetRowAddressBounds(oled_device_t const * const device, uint8_t const min, uint8_t const max)
 {
     OLED_SetAddressBoundsWithOffset(device, OLED_SET_ROW_ADDRESS, min, max, 0);
 
     return;
 }
 
-__attribute__((always_inline)) inline void OLED_SetColumnAddressBounds(oled_device_t const * const device, uint8_t const min, uint8_t const max)
+INLINE void OLED_SetColumnAddressBounds(oled_device_t const * const device, uint8_t const min, uint8_t const max)
 {
     OLED_SetAddressBoundsWithOffset(device, OLED_SET_COLUMN_ADDRESS, min, max, 16);
 

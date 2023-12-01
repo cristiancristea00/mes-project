@@ -16,6 +16,7 @@
 #include "oled-draw.h"
 
 #include "config.h"
+#include "utils.h"
 #include "oled.h"
 
 #include <stdint.h>
@@ -48,7 +49,7 @@
  * @param[in] colour Colour of the point
  * @return None
  **/
-__attribute__((always_inline)) inline void OLED_DRAW_Point(oled_device_t const * const device, uint8_t const x, uint8_t const y, oled_packed_colour_t const colour);
+INLINE void OLED_DRAW_Point(oled_device_t const * const device, uint8_t const x, uint8_t const y, oled_packed_colour_t const colour);
 
 /**
  * @brief Draws a line on the OLED screen.
@@ -59,7 +60,7 @@ __attribute__((always_inline)) inline void OLED_DRAW_Point(oled_device_t const *
  * @param[in] colour Colour of the line
  * @return None
  **/
-__attribute__((always_inline)) inline void OLED_DRAW_Line(oled_device_t const * const device, oled_point_t const start, oled_point_t const end, uint8_t const width, oled_packed_colour_t const colour);
+INLINE void OLED_DRAW_Line(oled_device_t const * const device, oled_point_t const start, oled_point_t const end, uint8_t const width, oled_packed_colour_t const colour);
 
 /**
  * @brief Draws a rectangle on the OLED screen.
@@ -70,7 +71,7 @@ __attribute__((always_inline)) inline void OLED_DRAW_Line(oled_device_t const * 
  * @param[in] colour Colour of the border
  * @return None
  **/
-__attribute__((always_inline)) inline void OLED_DRAW_Rectangle(oled_device_t const * const device, oled_point_t const start, oled_point_t const end, uint8_t const width, oled_packed_colour_t const colour);
+INLINE void OLED_DRAW_Rectangle(oled_device_t const * const device, oled_point_t const start, oled_point_t const end, uint8_t const width, oled_packed_colour_t const colour);
 
 /**
  * @brief Draws a filled rectangle on the OLED screen.
@@ -80,7 +81,7 @@ __attribute__((always_inline)) inline void OLED_DRAW_Rectangle(oled_device_t con
  * @param[in] colour Colour of the rectangle
  * @return None
  **/
-__attribute__((always_inline)) inline void OLED_DRAW_FilledRectangle(oled_device_t const * const device, oled_point_t const startPoint, oled_point_t const endPoint, oled_packed_colour_t const colour);
+INLINE void OLED_DRAW_FilledRectangle(oled_device_t const * const device, oled_point_t const startPoint, oled_point_t const endPoint, oled_packed_colour_t const colour);
 
 /**
  * @brief Draws a circle on the OLED screen.
@@ -91,7 +92,7 @@ __attribute__((always_inline)) inline void OLED_DRAW_FilledRectangle(oled_device
  * @param[in] colour Colour of the border
  * @return None
  **/
-__attribute__((always_inline)) inline void OLED_DRAW_Circle(oled_device_t const * const device, oled_point_t const center, uint8_t const radius, uint8_t const width, oled_packed_colour_t const colour);
+INLINE void OLED_DRAW_Circle(oled_device_t const * const device, oled_point_t const center, uint8_t const radius, uint8_t const width, oled_packed_colour_t const colour);
 
 /**
  * @brief Draws a disc on the OLED screen.
@@ -101,7 +102,7 @@ __attribute__((always_inline)) inline void OLED_DRAW_Circle(oled_device_t const 
  * @param[in] colour Colour of the disc
  * @return None
  **/
-__attribute__((always_inline)) inline void OLED_DRAW_Disc(oled_device_t const * const device, oled_point_t const center, uint8_t const radius, oled_packed_colour_t const colour);
+INLINE void OLED_DRAW_Disc(oled_device_t const * const device, oled_point_t const center, uint8_t const radius, oled_packed_colour_t const colour);
 
 /**
  * @brief Draws a 24-bit RGB colour bitmap on the OLED screen.
@@ -112,7 +113,7 @@ __attribute__((always_inline)) inline void OLED_DRAW_Disc(oled_device_t const * 
  * @param[in] start Start position (top left corner)
  * @return None
  **/
-__attribute__((always_inline)) inline void OLED_DRAW_Bitmap(oled_device_t const * const device, oled_packed_colour_t const * const bitmap, uint8_t const xSize, uint8_t const ySize, oled_point_t const start);
+INLINE void OLED_DRAW_Bitmap(oled_device_t const * const device, oled_packed_colour_t const * const bitmap, uint8_t const xSize, uint8_t const ySize, oled_point_t const start);
 
 /**
  * @brief Draws a character on the OLED screen.
@@ -124,7 +125,7 @@ __attribute__((always_inline)) inline void OLED_DRAW_Bitmap(oled_device_t const 
  * @param[in] colour Colour of the character
  * @return None
  **/
-__attribute__((always_inline)) inline void OLED_DRAW_Character(oled_device_t const * const device, oled_point_t const start, uint8_t const xScale, uint8_t const yScale, uint8_t const character, oled_packed_colour_t const colour);
+INLINE void OLED_DRAW_Character(oled_device_t const * const device, oled_point_t const start, uint8_t const xScale, uint8_t const yScale, uint8_t const character, oled_packed_colour_t const colour);
 
 /**
  * @brief Draws a string on the OLED screen.
@@ -136,7 +137,7 @@ __attribute__((always_inline)) inline void OLED_DRAW_Character(oled_device_t con
  * @param[in] colour Colour of the characters
  * @return None
  **/
-__attribute__((always_inline)) inline void OLED_DRAW_String(oled_device_t const * const device, oled_point_t const start, uint8_t const xScale, uint8_t const yScale, uint8_t const * const data, oled_packed_colour_t const colour);
+INLINE void OLED_DRAW_String(oled_device_t const * const device, oled_point_t const start, uint8_t const xScale, uint8_t const yScale, uint8_t const * const data, oled_packed_colour_t const colour);
 
 /**
  * @brief Unified API to draw a point on the OLED screen.
@@ -216,7 +217,7 @@ void OLED_DrawString(oled_device_t const * const device, oled_shape_t const * co
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
 
-__attribute__((always_inline)) inline void OLED_DRAW_Point(oled_device_t const * const device, uint8_t const x, uint8_t const y, oled_packed_colour_t const colour)
+INLINE void OLED_DRAW_Point(oled_device_t const * const device, uint8_t const x, uint8_t const y, oled_packed_colour_t const colour)
 {
     if ((x > OLED_DRAW_MAX_DIMENSION) || (y > OLED_DRAW_MAX_DIMENSION))
     {
@@ -233,7 +234,7 @@ __attribute__((always_inline)) inline void OLED_DRAW_Point(oled_device_t const *
     return;
 }
 
-__attribute__((always_inline)) inline void OLED_DRAW_Line(oled_device_t const * const device, oled_point_t const start, oled_point_t const end, uint8_t const width, oled_packed_colour_t const colour)
+INLINE void OLED_DRAW_Line(oled_device_t const * const device, oled_point_t const start, oled_point_t const end, uint8_t const width, oled_packed_colour_t const colour)
 {
     uint8_t const lineWidth = (width > 1) ? width : 1;
 
@@ -285,7 +286,7 @@ __attribute__((always_inline)) inline void OLED_DRAW_Line(oled_device_t const * 
     return;
 }
 
-__attribute__((always_inline)) inline void OLED_DRAW_Rectangle(oled_device_t const * const device, oled_point_t const start, oled_point_t const end, uint8_t const width, oled_packed_colour_t const colour)
+INLINE void OLED_DRAW_Rectangle(oled_device_t const * const device, oled_point_t const start, oled_point_t const end, uint8_t const width, oled_packed_colour_t const colour)
 {
 
     oled_point_t const topLeft     = { start.x, start.y };
@@ -301,7 +302,7 @@ __attribute__((always_inline)) inline void OLED_DRAW_Rectangle(oled_device_t con
     return;
 }
 
-__attribute__((always_inline)) inline void OLED_DRAW_FilledRectangle(oled_device_t const * const device, oled_point_t const start, oled_point_t const end, oled_packed_colour_t const colour)
+INLINE void OLED_DRAW_FilledRectangle(oled_device_t const * const device, oled_point_t const start, oled_point_t const end, oled_packed_colour_t const colour)
 {
     OLED_SetColumnAddressBounds(device, start.x, end.x);
     OLED_SetRowAddressBounds(device, start.y, end.y);
@@ -321,7 +322,7 @@ __attribute__((always_inline)) inline void OLED_DRAW_FilledRectangle(oled_device
     return;
 }
 
-__attribute__((always_inline)) inline void OLED_DRAW_Circle(oled_device_t const * const device, oled_point_t const center, uint8_t const radius, uint8_t const width, oled_packed_colour_t const colour)
+INLINE void OLED_DRAW_Circle(oled_device_t const * const device, oled_point_t const center, uint8_t const radius, uint8_t const width, oled_packed_colour_t const colour)
 {
     int8_t x;
     int8_t y;
@@ -365,7 +366,7 @@ __attribute__((always_inline)) inline void OLED_DRAW_Circle(oled_device_t const 
     return;
 }
 
-__attribute__((always_inline)) inline void OLED_DRAW_Disc(oled_device_t const * const device, oled_point_t const center, uint8_t const radius, oled_packed_colour_t const colour)
+INLINE void OLED_DRAW_Disc(oled_device_t const * const device, oled_point_t const center, uint8_t const radius, oled_packed_colour_t const colour)
 {
     int8_t y = ((radius > 1) ? radius : 1) + 1;
     int8_t x = 0;
@@ -403,7 +404,7 @@ __attribute__((always_inline)) inline void OLED_DRAW_Disc(oled_device_t const * 
     return;
 }
 
-__attribute__((always_inline)) inline void OLED_DRAW_Bitmap(oled_device_t const * const device, oled_packed_colour_t const * const bitmap, uint8_t const xSize, uint8_t const ySize, oled_point_t const start)
+INLINE void OLED_DRAW_Bitmap(oled_device_t const * const device, oled_packed_colour_t const * const bitmap, uint8_t const xSize, uint8_t const ySize, oled_point_t const start)
 {
     OLED_SetColumnAddressBounds(device, start.x, start.x + xSize - 1);
     OLED_SetRowAddressBounds(device, start.y, start.y + ySize - 1);
@@ -423,7 +424,7 @@ __attribute__((always_inline)) inline void OLED_DRAW_Bitmap(oled_device_t const 
     return;
 }
 
-__attribute__((always_inline)) inline void OLED_DRAW_Character(oled_device_t const * const device, oled_point_t const start, uint8_t const xScale, uint8_t const yScale, uint8_t const character, oled_packed_colour_t const colour)
+INLINE void OLED_DRAW_Character(oled_device_t const * const device, oled_point_t const start, uint8_t const xScale, uint8_t const yScale, uint8_t const character, oled_packed_colour_t const colour)
 {
     static uint8_t const font[] = {
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFA, 0x00, 0x00, 0x00, 0xE0, 0x00, 0xE0, 0x00,  /*  ' ' AND ! AND "  */
@@ -488,7 +489,7 @@ __attribute__((always_inline)) inline void OLED_DRAW_Character(oled_device_t con
     return;
 }
 
-__attribute__((always_inline)) inline void OLED_DRAW_String(oled_device_t const * const device, oled_point_t const start, uint8_t const xScale, uint8_t const yScale, uint8_t const * const data, oled_packed_colour_t const colour)
+INLINE void OLED_DRAW_String(oled_device_t const * const device, oled_point_t const start, uint8_t const xScale, uint8_t const yScale, uint8_t const * const data, oled_packed_colour_t const colour)
 {
     uint8_t character = '\0';
     uint8_t const * currentStringPosition = data;

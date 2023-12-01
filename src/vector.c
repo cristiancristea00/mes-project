@@ -133,14 +133,14 @@ static void Vector_CheckAvailableSpace(vector_t * const vector, uint8_t const nu
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
 
-__attribute__((always_inline)) inline void Vector_Initialize(vector_t * const vector)
+INLINE void Vector_Initialize(vector_t * const vector)
 {
     Vector_Clear(vector);
 
     return;
 }
 
-__attribute__((always_inline)) inline void Vector_Clear(vector_t * const vector)
+INLINE void Vector_Clear(vector_t * const vector)
 {
     vector->bufferSize = 0;
 

@@ -16,6 +16,7 @@
 #include "spi.h"
 
 #include "config.h"
+#include "utils.h"
 
 #include <avr/io.h>
 
@@ -36,47 +37,47 @@
  * @brief Initialize the SPI module on the SPI0 bus.
  * @return None
  **/
-__attribute__((always_inline)) inline static void SPI0_Inititialize(void);
+STATIC_INLINE void SPI0_Inititialize(void);
 
 /**
  * @brief Enables (active low) chip select on the SPI0 bus.
  * @param[in] chipSelect The corresponding chip select pin
  * @return None
  **/
-__attribute__((always_inline)) inline static void SPI0_ClientSelect(spi_chip_select_t const chipSelect);
+STATIC_INLINE void SPI0_ClientSelect(spi_chip_select_t const chipSelect);
 
 /**
  * @brief Disables (active low) chip select on the SPI0 bus.
  * @param[in] chipSelect The corresponding chip select pin
  * @return None
  **/
-__attribute__((always_inline)) inline static void SPI0_ClientDeselect(spi_chip_select_t const chipSelect);
+STATIC_INLINE void SPI0_ClientDeselect(spi_chip_select_t const chipSelect);
 
 /**
  * @brief Waits for the SPI0 bus to be ready.
  * @return None
  **/
-__attribute__((always_inline)) inline static void SPI0_WaitDataReady(void);
+STATIC_INLINE void SPI0_WaitDataReady(void);
 
 /**
  * @brief Sends a byte over the SPI0 bus.
  * @param[in] byte The byte to send
  * @return None
  **/
-__attribute__((always_inline)) inline static void SPI0_SendByte(uint8_t const byte);
+STATIC_INLINE void SPI0_SendByte(uint8_t const byte);
 
 /**
  * @brief Receives a byte over the SPI0 bus.
  * @return uint8_t The byte received
  **/
-__attribute__((always_inline)) inline static uint8_t SPI0_ReceiveByte(void);
+STATIC_INLINE uint8_t SPI0_ReceiveByte(void);
 
 /**
  * @brief Sends a byte over the SPI0 bus and receives a byte back.
  * @param[in] byte The byte to send
  * @return uint8_t The byte received
  **/
-__attribute__((always_inline)) inline static uint8_t SPI0_ExchangeByte(uint8_t const byte);
+STATIC_INLINE uint8_t SPI0_ExchangeByte(uint8_t const byte);
 
 /**
  * @brief Sends a specified number of bytes to the device using the SPI bus.
@@ -116,7 +117,7 @@ static spi_error_code_t SPI0_ExchangeData(uint8_t * const dataForExchange, uint8
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
 
-__attribute__((always_inline)) inline static void SPI0_Inititialize(void)
+STATIC_INLINE void SPI0_Inititialize(void)
 {
     // PA4 - MOSI - OUT | PA5 - MISO - IN | PA6 - SCK - OUT
     PORTA.DIRSET = PIN4_bm | PIN6_bm;
@@ -241,7 +242,7 @@ static spi_error_code_t SPI0_ExchangeData(uint8_t * const dataForExchange, uint8
     return SPI_OK;
 }
 
-__attribute__((always_inline)) inline static void SPI0_ClientSelect(spi_chip_select_t const chipSelect)
+STATIC_INLINE void SPI0_ClientSelect(spi_chip_select_t const chipSelect)
 {
     switch (chipSelect)
     {
@@ -274,7 +275,7 @@ __attribute__((always_inline)) inline static void SPI0_ClientSelect(spi_chip_sel
     return;
 }
 
-__attribute__((always_inline)) inline static void SPI0_ClientDeselect(spi_chip_select_t const chipSelect)
+STATIC_INLINE void SPI0_ClientDeselect(spi_chip_select_t const chipSelect)
 {
     switch (chipSelect)
     {
@@ -307,7 +308,7 @@ __attribute__((always_inline)) inline static void SPI0_ClientDeselect(spi_chip_s
     return;
 }
 
-__attribute__((always_inline)) inline static void SPI0_WaitDataReady(void)
+STATIC_INLINE void SPI0_WaitDataReady(void)
 {
     while (!(SPI0.INTFLAGS & SPI_RXCIF_bm))
     {
@@ -317,19 +318,19 @@ __attribute__((always_inline)) inline static void SPI0_WaitDataReady(void)
     return;
 }
 
-__attribute__((always_inline)) inline static void SPI0_SendByte(uint8_t const byte)
+STATIC_INLINE void SPI0_SendByte(uint8_t const byte)
 {
     SPI0.DATA = byte;
 
     return;
 }
 
-__attribute__((always_inline)) inline static uint8_t SPI0_ReceiveByte(void)
+STATIC_INLINE uint8_t SPI0_ReceiveByte(void)
 {
     return SPI0.DATA;
 }
 
-__attribute__((always_inline)) inline static uint8_t SPI0_ExchangeByte(uint8_t const byte)
+STATIC_INLINE uint8_t SPI0_ExchangeByte(uint8_t const byte)
 {
     SPI0_SendByte(byte);
 

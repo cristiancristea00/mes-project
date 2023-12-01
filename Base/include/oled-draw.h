@@ -8,7 +8,7 @@
 
 
 #ifndef OLED_DRAW_H
-#define	OLED_DRAW_H
+#define OLED_DRAW_H
 
 ////////////////////////////////////////////////////////////////////////////////
 //                                                                            //
@@ -43,11 +43,11 @@ typedef enum OLED_SHAPE_TYPE
     OLED_SHAPE_LINE             = 0x01,
     OLED_SHAPE_RECTANGLE        = 0x02,
     OLED_SHAPE_FILLED_RECTANGLE = 0x03,
-	OLED_SHAPE_DISC             = 0x04,
-	OLED_SHAPE_CIRCLE           = 0x05,
- 	OLED_SHAPE_BITMAP           = 0x06,
-	OLED_SHAPE_CHARACTER        = 0x07,
-	OLED_SHAPE_STRING           = 0x08,
+    OLED_SHAPE_DISC             = 0x04,
+    OLED_SHAPE_CIRCLE           = 0x05,
+    OLED_SHAPE_BITMAP           = 0x06,
+    OLED_SHAPE_CHARACTER        = 0x07,
+    OLED_SHAPE_STRING           = 0x08,
 } oled_shape_type_t;
 
 typedef struct OLED_POINT

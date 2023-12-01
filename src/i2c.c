@@ -14,6 +14,8 @@
 
 #include "i2c.h"
 
+#include "utils.h"
+
 #include <avr/io.h>
 
 #include <stddef.h>
@@ -63,7 +65,7 @@ typedef enum I2C_DATA_DIRECTION
  * @param[in] mode The mode of the I2C bus: Standard, Fast or Fast Plus
  * @return None
  **/
-__attribute__((always_inline)) inline static void I2C0_Inititialize(i2c_mode_t const mode);
+STATIC_INLINE void I2C0_Inititialize(i2c_mode_t const mode);
 
 /**
  * @brief Sends a specific number of bytes to the device on the I2C bus.
@@ -132,7 +134,7 @@ static uint8_t I2C0_SetAdressDirectionBit(uint8_t const deviceAddress, i2c_data_
  * @brief Ends the I2C communication by sending a stop condition.
  * @return None
  **/
-__attribute__((always_inline)) inline static void I2C0_EndTransation(void);
+STATIC_INLINE void I2C0_EndTransation(void);
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -141,7 +143,7 @@ __attribute__((always_inline)) inline static void I2C0_EndTransation(void);
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
 
-__attribute__((always_inline)) inline static void I2C0_Inititialize(i2c_mode_t const mode)
+STATIC_INLINE void I2C0_Inititialize(i2c_mode_t const mode)
 {
 #if defined __AVR128DA48__
     // Select I2C pins to PC2 - SDA and PC3 - SCL
@@ -349,7 +351,7 @@ static bool I2C0_ClientAvailable(uint8_t const clientAddress)
     return ( returnValue == I2C_OK );
 }
 
-__attribute__((always_inline)) inline static void I2C0_EndTransation(void)
+STATIC_INLINE void I2C0_EndTransation(void)
 {
     // Sends a STOP condition on the bus and clears the internal state
     TWI0.MCTRLB = TWI_MCMD_STOP_gc;

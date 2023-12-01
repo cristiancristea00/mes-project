@@ -8,7 +8,7 @@
 
 
 #ifndef CONFIG_H
-#define	CONFIG_H
+#define CONFIG_H
 
 /**
  * @brief This must be defined at the top to have other includes working.

@@ -5,6 +5,11 @@
  *
  *  @brief Header file for the Utils module
  **/
+ 
+ 
+#ifndef UTILS_H
+#define UTILS_H
+
 
 ////////////////////////////////////////////////////////////////////////////////
 //                                                                            //
@@ -47,6 +52,10 @@
 #define PauseMiliseconds(MILIS)      do { _delay_ms((MILIS)); } while (false)
 #define PauseMicroseconds(MICROS)    do { _delay_us((MICROS)); } while (false)
 
-// Force inline for static functions
+// Force inline for functions
 
+#define INLINE           __attribute__((always_inline)) inline
 #define STATIC_INLINE    __attribute__((always_inline)) static inline
+
+
+#endif // UTILS_H

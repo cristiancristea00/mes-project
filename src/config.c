@@ -16,6 +16,7 @@
 #include "config.h"
 
 #include "uart.h"
+#include "utils.h"
 
 #include <util/delay.h>
 #include <avr/io.h>
@@ -29,7 +30,7 @@
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
 
-__attribute__((always_inline)) inline void SetClockFrequencyWithPrescaler(uint8_t const frequency, uint8_t const prescaler)
+INLINE void SetClockFrequencyWithPrescaler(uint8_t const frequency, uint8_t const prescaler)
 {
     SetClockFrequency(frequency);
 
@@ -39,7 +40,7 @@ __attribute__((always_inline)) inline void SetClockFrequencyWithPrescaler(uint8_
     return;
 }
 
-__attribute__((always_inline)) inline void SetClockFrequency(uint8_t const frequency)
+INLINE void SetClockFrequency(uint8_t const frequency)
 {
     // Enable external crystal oscillator
     _PROTECTED_WRITE(CLKCTRL.XOSC32KCTRLA, CLKCTRL_ENABLE_bm);
@@ -53,12 +54,12 @@ __attribute__((always_inline)) inline void SetClockFrequency(uint8_t const frequ
     return;
 }
 
-__attribute__((always_inline)) inline void TightLoopContents(void)
+INLINE void TightLoopContents(void)
 {
     return;
 }
 
-__attribute__((always_inline)) inline void PrintForLogging(char const * const message)
+INLINE void PrintForLogging(char const * const message)
 {
 #if defined __AVR128DA48__
     uart1.Print(message);
