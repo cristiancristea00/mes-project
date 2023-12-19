@@ -145,7 +145,7 @@ void Application_Run(void)
             BME280_SerializeSensorData(&weatherClick, &serializedSensorsData);
             BLUETOOTH_SendData(&bluetooth, &serializedSensorsData, BME280_SERIALIZED_SIZE);
             DisplayData(&weatherClick.data);
-            PauseMiliseconds(5000);
+            PauseMiliseconds(20000);
         }
     }
 }
