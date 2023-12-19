@@ -71,3 +71,34 @@ INLINE void PrintForLogging(char const * const message)
 
     return;
 }
+
+
+////////////////////////////////////////////////////////////////////////////////
+//                                                                            //
+//                                   Fuses                                    //
+//                                                                            //
+////////////////////////////////////////////////////////////////////////////////
+
+#if defined __AVR128DA48__
+    FUSES = {
+        .BODCFG   = ACTIVE_DISABLE_gc | LVL_BODLEVEL0_gc | SAMPFREQ_128Hz_gc | SLEEP_DISABLE_gc,
+        .BOOTSIZE = 0x00,
+        .CODESIZE = 0x00,
+        .OSCCFG   = CLKSEL_OSCHF_gc,
+        .SYSCFG0  = CRCSEL_CRC16_gc | CRCSRC_NOCRC_gc | RSTPINCFG_GPIO_gc,
+        .SYSCFG1  = SUT_0MS_gc,
+        .WDTCFG   = PERIOD_OFF_gc | WINDOW_OFF_gc,
+    };
+#elif defined __AVR64DD32__
+    FUSES = {
+        .BODCFG   = ACTIVE_DISABLE_gc | LVL_BODLEVEL0_gc | SAMPFREQ_128Hz_gc | SLEEP_DISABLE_gc,
+        .BOOTSIZE = 0x00,
+        .CODESIZE = 0x00,
+        .OSCCFG   = CLKSEL_OSCHF_gc,
+        .SYSCFG0  = CRCSEL_CRC16_gc | CRCSRC_NOCRC_gc | RSTPINCFG_GPIO_gc | UPDIPINCFG_UPDI_gc,
+        .SYSCFG1  = MVSYSCFG_DUAL_gc | SUT_0MS_gc,
+        .WDTCFG   = PERIOD_OFF_gc | WINDOW_OFF_gc,
+    };
+#else
+    #error "Invalid device!"
+#endif
