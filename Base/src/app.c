@@ -83,7 +83,7 @@ STATIC_INLINE void ClearLineOfText(oled_device_t const * const oled, oled_point_
 ////////////////////////////////////////////////////////////////////////////////
 
 static oled_colour_t const black = { 0x00, 0x00, 0x00 };
-static oled_colour_t const white = { 0xFF, 0xFF, 0xFF };
+static oled_colour_t const grey  = { 0xF0, 0xF0, 0xF0 };
 
 STATIC_INLINE void SystemInitialize(void)
 {
@@ -125,15 +125,15 @@ STATIC_INLINE void DisplayData(bme280_data_t const * const sensorsData, oled_dev
 {
     char temperatureBuffer[MAX_ROW_DISPLAY];
     double const temperature = BME280_GetDisplayTemperature(sensorsData);
-    sprintf(temperatureBuffer, "%0.2lf degrees C", temperature);
+    snprintf(temperatureBuffer, MAX_ROW_DISPLAY, "%0.2lf degrees C", temperature);
 
     char pressureBuffer[MAX_ROW_DISPLAY];
     double const pressure = BME280_GetDisplayPressure(sensorsData);
-    sprintf(pressureBuffer, "%0.2lf hPa", pressure);
+    snprintf(pressureBuffer, MAX_ROW_DISPLAY, "%0.2lf hPa", pressure);
 
     char humidityBuffer[MAX_ROW_DISPLAY];
     double const humidity = BME280_GetDisplayHumidity(sensorsData);
-    sprintf(humidityBuffer, "%0.2lf %c", humidity, '%');
+    snprintf(humidityBuffer, MAX_ROW_DISPLAY, "%0.2lf %c", humidity, '%');
 
 
     oled_point_t temperatureTextStart = {
@@ -152,37 +152,34 @@ STATIC_INLINE void DisplayData(bme280_data_t const * const sensorsData, oled_dev
     oled_shape_parameters_t temperaturetTextParameters;
     temperaturetTextParameters.string.scale_x = 1;
     temperaturetTextParameters.string.scale_y = 1;
-    temperaturetTextParameters.string.start = temperatureTextStart;
-    temperaturetTextParameters.string.data = (uint8_t const *) temperatureBuffer;
+    temperaturetTextParameters.string.start   = temperatureTextStart;
+    temperaturetTextParameters.string.data    = (uint8_t const *) temperatureBuffer;
     oled_shape_t temperatureText;
-    OLED_SetShape(&temperatureText, OLED_SHAPE_STRING, &temperaturetTextParameters, white);
+    OLED_SetShape(&temperatureText, OLED_SHAPE_STRING, &temperaturetTextParameters, grey);
 
     oled_shape_parameters_t pressureTextParameters;
     pressureTextParameters.string.scale_x = 1;
     pressureTextParameters.string.scale_y = 1;
-    pressureTextParameters.string.start = pressureTextStart;
-    pressureTextParameters.string.data = (uint8_t const *) pressureBuffer;
+    pressureTextParameters.string.start   = pressureTextStart;
+    pressureTextParameters.string.data    = (uint8_t const *) pressureBuffer;
     oled_shape_t pressureText;
-    OLED_SetShape(&pressureText, OLED_SHAPE_STRING, &pressureTextParameters, white);
+    OLED_SetShape(&pressureText, OLED_SHAPE_STRING, &pressureTextParameters, grey);
 
     oled_shape_parameters_t humidityTextParameters;
     humidityTextParameters.string.scale_x = 1;
     humidityTextParameters.string.scale_y = 1;
-    humidityTextParameters.string.start = humidityTextStart;
-    humidityTextParameters.string.data = (uint8_t const *) humidityBuffer;
+    humidityTextParameters.string.start   = humidityTextStart;
+    humidityTextParameters.string.data    = (uint8_t const *) humidityBuffer;
     oled_shape_t humidityText;
-    OLED_SetShape(&humidityText, OLED_SHAPE_STRING, &humidityTextParameters, white);
+    OLED_SetShape(&humidityText, OLED_SHAPE_STRING, &humidityTextParameters, grey);
 
     ClearLineOfText(oled, temperatureTextStart);
-    
     temperatureText.Draw(oled, &temperatureText);
 
     ClearLineOfText(oled, pressureTextStart);
-    
     pressureText.Draw(oled, &pressureText);
 
     ClearLineOfText(oled, humidityTextStart);
-    
     humidityText.Draw(oled, &humidityText);
 
     printf("Temperature: %0.2lf °C\n\r", temperature);
@@ -206,7 +203,7 @@ STATIC_INLINE void DisplaySetup(oled_device_t const * const oled)
     textStart.y = 0;
     textParameters.string.start = textStart;
     textParameters.string.data = (uint8_t const *) "Temperature:";
-    OLED_SetShape(&text, OLED_SHAPE_STRING, &textParameters, white);
+    OLED_SetShape(&text, OLED_SHAPE_STRING, &textParameters, grey);
     
     text.Draw(oled, &text);
 
@@ -214,7 +211,7 @@ STATIC_INLINE void DisplaySetup(oled_device_t const * const oled)
     textStart.y = 2 * (OLED_DRAW_FONT_HEIGHT + DISPLAY_SPACING);
     textParameters.string.start = textStart;
     textParameters.string.data = (uint8_t const *) "Pressure:";
-    OLED_SetShape(&text, OLED_SHAPE_STRING, &textParameters, white);
+    OLED_SetShape(&text, OLED_SHAPE_STRING, &textParameters, grey);
     
     text.Draw(oled, &text);
 
@@ -222,7 +219,7 @@ STATIC_INLINE void DisplaySetup(oled_device_t const * const oled)
     textStart.y = 4 * (OLED_DRAW_FONT_HEIGHT + DISPLAY_SPACING);
     textParameters.string.start = textStart;
     textParameters.string.data = (uint8_t const *) "Humidity:";
-    OLED_SetShape(&text, OLED_SHAPE_STRING, &textParameters, white);
+    OLED_SetShape(&text, OLED_SHAPE_STRING, &textParameters, grey);
     
     text.Draw(oled, &text);
 

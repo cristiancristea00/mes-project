@@ -79,11 +79,11 @@ STATIC_INLINE void ModulesInitialize(bme280_device_t * const bme280, bluetooth_d
 {
     bme280_settings_t settings = {
         .temperatureOversampling = BME280_OVERSAMPLING_16X,
-        .pressureOversampling = BME280_OVERSAMPLING_16X,
-        .humidityOversampling = BME280_OVERSAMPLING_16X,
-        .iirFilterCoefficients = BME280_IIR_FILTER_16,
-        .powerMode = BME280_NORMAL_MODE,
-        .standbyTime = BME280_STANDBY_TIME_250_MS
+        .pressureOversampling    = BME280_OVERSAMPLING_16X,
+        .humidityOversampling    = BME280_OVERSAMPLING_16X,
+        .iirFilterCoefficients   = BME280_IIR_FILTER_16,
+        .powerMode               = BME280_NORMAL_MODE,
+        .standbyTime             = BME280_STANDBY_TIME_250_MS
     };
     
     BME280_Initialize(bme280, &BME280_I2C_Handler, &i2c0, BME280_I2C_ADDRESS, &settings);
